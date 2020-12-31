@@ -1,4 +1,4 @@
-const { override, fixBabelImports, addLessLoader, addWebpackAlias } = require("customize-cra");
+const {override, fixBabelImports, addLessLoader, addWebpackAlias} = require("customize-cra");
 const path = require("path");
 
 module.exports = override(
@@ -12,6 +12,7 @@ module.exports = override(
     addLessLoader({
         lessOptions: {
             javascriptEnabled: true,
+            localIdentName: '[local]--[hash:base64:5]', // 自定义 CSS Modules 的 localIdentName
         },
     }),
     //增加路径别名的处理

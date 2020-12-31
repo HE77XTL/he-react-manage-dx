@@ -1,14 +1,14 @@
 import {Link} from "react-router-dom";
 import React from "react";
 import HomeRouter from '../../router/home'
-import'./home.less'
+import styles from './home.module.less'
 
 const Home  = function () {
     return(
         <div>
-            <header className="home">
+            <header className={styles.home}>
                 <h2> home header</h2>
-                <div className="test">class test</div>
+                <div className={styles.test}>class test</div>
             </header>
             <aside>
                 <nav>
