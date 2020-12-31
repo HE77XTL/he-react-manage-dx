@@ -12,9 +12,6 @@ const Home  = function () {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
                             <Link to="/about">About</Link>
                         </li>
                         <li>
@@ -24,7 +21,6 @@ const Home  = function () {
                 </nav>
             </aside>
             <main>
-                content
                 <HomeRouter/>
             </main>
         </div>
