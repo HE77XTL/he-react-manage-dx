@@ -5,6 +5,8 @@ import HomeRouter from '../../router/home'
 import styles from './home.module.less'
 import Logo from '../../images/logo.png'
 
+import DsIcon from '../../components/dsIcon/dsIcon'
+
 const Home  = function () {
     return(
         <div className={styles.homeWrap}>
@@ -12,7 +14,7 @@ const Home  = function () {
                 <img src={Logo} className={styles.logo} alt="logo"/>
                 {/*后续有其他内容可以加在btn 后面*/}
                 <div className={styles.collapseButton}>
-                    <i className="ds-iconfont ds-icon-arrow-right" />
+                    <DsIcon size="24" color="red" name="ds-icon-arrow-right" className="test" />
                 </div>
                 <div className={styles.user}>user</div>
             </header>
