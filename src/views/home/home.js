@@ -1,16 +1,22 @@
 import {Link} from "react-router-dom";
 import React from "react";
+import { Button, Icon} from 'caihrc';
 import HomeRouter from '../../router/home'
 import styles from './home.module.less'
+import Logo from '../../images/logo.png'
 
 const Home  = function () {
     return(
-        <div>
-            <header className={styles.home}>
-                <h2> home header</h2>
-                <div className={styles.test}>class test</div>
+        <div className={styles.homeWrap}>
+            <header className={styles.homeHeader}>
+                <img src={Logo} className={styles.logo} alt="logo"/>
+                {/*后续有其他内容可以加在btn 后面*/}
+                <div className={styles.collapseButton}>
+                    <i className="ds-iconfont ds-icon-arrow-right" />
+                </div>
+                <div className={styles.user}>user</div>
             </header>
-            <aside>
+            <aside className={styles.homeAside}>
                 <nav>
                     <ul>
                         <li>
@@ -22,7 +28,7 @@ const Home  = function () {
                     </ul>
                 </nav>
             </aside>
-            <main>
+            <main className={styles.homeMain}>
                 <HomeRouter/>
             </main>
         </div>

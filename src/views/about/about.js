@@ -1,8 +1,14 @@
 import React from 'react';
+import { Button } from 'caihrc';
 
 const About  = function () {
     return(
-        <div>About</div>
+        <div>
+            About
+            <div>
+                <Button>dx-btn</Button>
+            </div>
+        </div>
     )
 };
 

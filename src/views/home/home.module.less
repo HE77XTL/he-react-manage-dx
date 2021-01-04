@@ -1,6 +1,51 @@
-.home {
-  color: red;
-  .test {
-    color: green;
+//z-index 区域划分
+// 0-10 背景
+// 10-100 页面层级
+// 100-500 弹框
+
+
+
+
+@headerHeight: 60px;
+
+.homeWrap {
+  display: flex;
+  min-width: 960px;
+
+  .homeHeader {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: @headerHeight;
+    border-bottom: solid 1px;
+    background: white;
+    box-sizing: border-box;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    .logo {
+      height: 100%;
+    }
+    .collapseButton {
+      flex: 1;
+    }
+    .user {
+
+    }
+
+  }
+  .homeAside {
+    padding-top: @headerHeight;
+    width: 120px;
+    min-height: 100vh;
+    border-right: solid 1px;
+  }
+  .homeMain {
+    padding-top: @headerHeight;
+    flex: 1;
+    background: #dddddd;
+    min-height: 100vh;
   }
 }
