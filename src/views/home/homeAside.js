@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Menu} from 'caihrc';
 import menuList from './menuList'
 import {useHistory} from "react-router-dom";
 import DsIcon from '../../components/dsIcon/dsIcon'
-
+import styles from "./home.module.less";
 
 const HomeAside = function (props) {
     const history = useHistory();
+    const [menuStyle, setMenuStyle] = useState(menuStyleFmt(props.collapse))
+
+    function menuStyleFmt(collapse) {
+        return collapse
+            ? {opacity: '0', width: '0'}
+            : {opacity: '1', width: '220px'}
+    }
+
+    useEffect(() => {
+        setMenuStyle(menuStyleFmt(props.collapse))
+    }, [props.collapse]);
+
 
     // 菜单递归渲染
     function menuFmt(menu) {
@@ -35,19 +47,20 @@ const HomeAside = function (props) {
 
 
     return (
-        <Menu onClick={(e) => {
-            onMenuClick(e)
-        }}
-              defaultSelectedKeys={['input']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"
-              theme="light"
-              inlineCollapsed={false}>
-            {menuList.map(item => {
-                return menuFmt(item)
-            })}
-        </Menu>
-    )
+        <div className={styles.homeAside} style={menuStyle}>
+            <Menu onClick={(e) => {
+                onMenuClick(e)
+            }}
+                  defaultSelectedKeys={['input']}
+                  defaultOpenKeys={['sub1']}
+                  mode="inline"
+                  theme="light"
+                  inlineCollapsed={false}>
+                {menuList.map(item => {
+                    return menuFmt(item)
+                })}
+            </Menu>
+        </div>)
 };
 
 export default HomeAside
