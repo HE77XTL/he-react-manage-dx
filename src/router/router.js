@@ -8,8 +8,6 @@ import {
 import Home from '../views/home/home'
 import Login from '../views/login/login'
 
-
-
 export default function App() {
     return (
         <Router>

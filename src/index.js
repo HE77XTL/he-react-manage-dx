@@ -4,10 +4,8 @@ import Router from './router/router'
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <Router />,
+    document.getElementById('root')
 );
 
 

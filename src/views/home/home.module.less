@@ -6,7 +6,7 @@
 
 
 
-@headerHeight: 60px;
+@headerHeight: 70px;
 
 .homeWrap {
   display: flex;
@@ -19,14 +19,15 @@
     left: 0;
     width: 100%;
     height: @headerHeight;
-    border-bottom: solid 1px;
     background: white;
     box-sizing: border-box;
     padding: 8px;
     display: flex;
     align-items: center;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
     .logo {
       height: 100%;
+      transition: all 0.2s;
     }
     .collapseButton {
       flex: 1;
@@ -38,14 +39,14 @@
   }
   .homeAside {
     padding-top: @headerHeight;
-    width: 120px;
+    width: 220px;
     min-height: 100vh;
-    border-right: solid 1px;
+    transition: all 0.5s;
   }
   .homeMain {
     padding-top: @headerHeight;
     flex: 1;
-    background: #dddddd;
+    background: #f5f5fa;
     min-height: 100vh;
   }
 }
