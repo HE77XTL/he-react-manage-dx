@@ -62,7 +62,9 @@ const Home = function () {
                 </div>
             </aside>
             <main className={styles.homeMain}>
-                <HomeRouter/>
+                <div style={{margin: '10px'}}>
+                    <HomeRouter/>
+                </div>
             </main>
         </div>
     )

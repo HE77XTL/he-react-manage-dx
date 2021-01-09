@@ -38,15 +38,24 @@
 
   }
   .homeAside {
+    box-sizing: border-box;
     padding-top: @headerHeight;
     width: 220px;
-    min-height: 100vh;
+    height: 100vh;
     transition: all 0.5s;
   }
   .homeMain {
+    box-sizing: border-box;
     padding-top: @headerHeight;
     flex: 1;
     background: #f5f5fa;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: auto;
+  }
+  .homeMainContent {
+    border: 1px solid blue;
+    margin: 10px;
+    background: #ffffff;
+    overflow: auto;
   }
 }

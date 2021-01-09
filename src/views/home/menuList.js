@@ -1,7 +1,7 @@
 export default [
 	{
 		icon: 'ds-icon-home',
-		index: '/about',
+		index: '/dashboard',
 		title: 'Dashboard'
 	},
 	{
@@ -11,7 +11,7 @@ export default [
 	},
 	{
 		icon: 'ds-icon-rank',
-		index: '/main/icons',
+		index: '/about',
 		title: '自定义图标'
 	},
 	{

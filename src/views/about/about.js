@@ -3,9 +3,9 @@ import { Button } from 'caihrc';
 
 const About  = function () {
     return(
-        <div>
-            About
-            <div>
+        <div className='dsContent'>
+            <div >
+                About
                 <Button>dx-btn</Button>
             </div>
         </div>

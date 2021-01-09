@@ -1,9 +1,15 @@
 import React from 'react';
 
-const Dashboard  = function () {
-    return(
-        <div className="home">dashboard</div>
-    )
+const DashBoard = function () {
+    return (<div className='dsContent'>
+        <div>
+            DashBoard
+        </div>
+        <div>
+            <p>fdsokij;lkjfdas;lkjfdslkj;fds;lkjfds</p>
+            <p>fdsokij;lkjfdas;lkjfdslkj;fds;lkjfds</p>
+        </div>
+    </div>)
 };
 
-export default Dashboard
+export default DashBoard
