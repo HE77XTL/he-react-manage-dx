@@ -6,7 +6,7 @@ import styles from './home.module.less'
 import Logo from '../../images/logo.png'
 import DsIcon from '../../components/dsIcon/dsIcon'
 import HomeAside from './homeAside'
-import Events from '../../components/utils/Events'
+import Events from '../../common/utils/Events'
 import HomeHeader from './homeHeader'
 
 const Home = function () {

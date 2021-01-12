@@ -1,6 +1,22 @@
+/*布局---------------------------*/
 .dsContent {
     background: #fff;
     padding: 10px;
     border-radius: 4px;
 }
+
+
+
+/*常用样式简写---------------------------*/
+
+.flex-cc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
 

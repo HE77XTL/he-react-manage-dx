@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styles from "./home.module.less";
 import Logo from "../../images/logo.png";
 import DsIcon from "../../components/dsIcon/dsIcon";
-import Events from '../../components/utils/Events'
+import Events from '../../common/utils/Events'
 
 const HomeHeader = function (props) {
     const [iconStyle, setIconStyle] = useState(iconFmt(props.collapse));
