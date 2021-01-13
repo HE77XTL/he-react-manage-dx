@@ -13,7 +13,7 @@ const HomeRouter = function () {
         <Router>
             <Switch>
                 <Route path="/about" ><About /></Route>
-                <Route path="/dashboard"><Dashboard /></Route>
+                <Route path="/bill"><Dashboard /></Route>
             </Switch>
         </Router>
     );

@@ -49,10 +49,8 @@ const Login = function (props) {
             if (!res) return false;
 
             store.set('user', res);
-
-            // localStorage.setItem('user', JSON.stringify(res));
-            localStorage.setItem('menuList', JSON.stringify(res.menuList));
-            localStorage.setItem('token', res.token);
+            store.set('menuList', res.menuList);
+            store.set('token', res.token);
 
 
             axios.defaults.headers.token = res.token;
