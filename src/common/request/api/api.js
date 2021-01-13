@@ -9,7 +9,12 @@ const api = {
 
     verificationCode: p => request.get(webapi + '/verificationCode', p),// 验证码
     login: p => request.post(webapi + '/login', p),// 登陆
+    logout: p => request.post(webapi + '/logout', p),// 退出
+
+
+
     queryAllProductName: p => request.post(webapi + '/incomeBillListInfo/queryAllProductName', p),
+
 
 
 

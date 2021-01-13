@@ -8,8 +8,19 @@ import DsIcon from '../../components/dsIcon/dsIcon'
 import HomeAside from './homeAside'
 import Events from '../../common/utils/Events'
 import HomeHeader from './homeHeader'
+import store from 'store'
+import { useHistory } from "react-router-dom";
 
 const Home = function () {
+    const history = useHistory();
+    const user = store.get('user');
+
+    // 未登录，跳转到登陆页
+    // 对于token 失效。在接口请求的时候做统一处理了
+    if(!user || !user.userName || !user.token) {
+        history.push('/login');
+    }
+
     const [collapse, setCollapse] = useState(false);
 
     useEffect(() => {
@@ -18,6 +29,7 @@ const Home = function () {
             Events.off("collapse", collapseChange);
         }
     }, []);
+
 
     function collapseChange(val) {
         setCollapse(val)

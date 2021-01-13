@@ -1,16 +1,15 @@
 import React, {useState} from 'react';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import {Form, Input, Button} from 'caihrc';
 import {UserOutlined, LockOutlined, ReloadOutlined, SafetyCertificateOutlined} from '@ant-design/icons';
 
 import apiConfig from "../../common/request/api.config";
-
-import { useHistory } from "react-router-dom";
-
 import Api from '../../common/request/api/api'
-//import utils from '../../common/utils/utils'
-
 import styles from './login.module.less'
+
+import store from 'store'
+
 
 
 const Login = function (props) {
@@ -49,7 +48,9 @@ const Login = function (props) {
         Api.login(loginForm).then(res => {
             if (!res) return false;
 
-            localStorage.setItem('user', JSON.stringify(res));
+            store.set('user', res);
+
+            // localStorage.setItem('user', JSON.stringify(res));
             localStorage.setItem('menuList', JSON.stringify(res.menuList));
             localStorage.setItem('token', res.token);
 

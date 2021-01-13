@@ -4,6 +4,8 @@
 
 import axios from 'axios';
 import qs from 'qs';
+import store from 'store'
+import {HashRouter} from 'react-router-dom'
 
 import {Message} from 'caihrc';
 
@@ -72,6 +74,12 @@ axios.interceptors.request.use(
 
 //响应拦截----
 axios.interceptors.response.use(response => {
+
+        const router = new HashRouter();
+
+        console.log('response响应拦截----')
+        console.log(response)
+        console.log('response响应拦截----')
         removePending(response.config); // 在请求结束后，移除本次请求
         if (response.status === 200) {
             if (response.data.retCode === '403') {
@@ -79,8 +87,8 @@ axios.interceptors.response.use(response => {
                 // 如果不取消，某些页面初始化发送多个请求，下列语句会执行多次
                 clearPending();
                 Message.error(response.data.message);
-                // store.commit('isLoginUpdate', false);
-                // router.push('/login');
+                store.clearAll();
+                router.history.push('/login');
                 return false;
             } else if (response.data.retCode !== '00000') {
                 Message.error(response.data.message);
