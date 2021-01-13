@@ -9,11 +9,15 @@ import {useHistory} from 'react-router-dom'
 
 import store from 'store'
 
-import {Button, Modal, Dropdown, Menu, Message} from 'caihrc'
+import {Button, Modal, Dropdown, Menu, Message, Form} from 'caihrc'
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
 
 const HomeHeader = function (props) {
     const history = useHistory();
     const [iconStyle, setIconStyle] = useState(iconFmt(props.collapse));
+    const [iconState, setIconState] = useState('close');
+    const [editFormVisible, setEditFormVisible] = useState(false);
+
 
     // 能进入首页，而不跳转到登陆页，认为已经登陆了。即已经通过登陆接口获取到用户信息
     const user = store.get('user') || {};
@@ -49,14 +53,39 @@ const HomeHeader = function (props) {
         });
     }
 
-    function menu() {
-        return (<Menu>
+
+
+    const editPassword = (
+        <Modal
+            okText="确定"
+            cancelText="取消"
+            title="修改密码"
+            maskClosable={false}
+            visible={editFormVisible}
+            onOk={() => {
+                // form.submit();
+            }}
+            onCancel={() => {
+                // form.resetFields();
+                setEditFormVisible(false);
+            }}
+            initialWidth={600}
+            initialHeight={300}
+        >
+            <div>111</div>
+            {/*<Form.Factory {...editForm} form={form} labelCol={{ span: 5 }}/>*/}
+        </Modal>
+    );
+
+
+    const menu = (
+        <Menu>
             <Menu.Item>
-                <a onClick={() => {
-                }}>修改密码</a>
+                <a onClick={() => {setEditFormVisible(true);}}>修改密码</a>
             </Menu.Item>
-        </Menu>)
-    }
+        </Menu>
+    );
+
 
 
     return (<div className={styles.homeHeader}>
@@ -68,7 +97,20 @@ const HomeHeader = function (props) {
                 name={iconStyle.name}
             />
         </div>
-        <div className={styles.user}>{user.userName}</div>
+
+        <div className={styles.user}>
+            <Dropdown overlay={menu}
+                      trigger="click"
+                      placement="bottomCenter"
+                      onVisibleChange={visible => {
+                          setIconState(visible ? 'open' : 'close');
+                      }}>
+                <a onClick={e => e.preventDefault()} className={styles.userName}>
+                    {user.userName} {iconState == 'close' ? <DownOutlined /> : <UpOutlined />}
+                </a>
+            </Dropdown>
+            {editPassword}
+        </div>
         <div>
             <Button type="primary" size="exSmall" onClick={logout}>退出</Button>
         </div>
