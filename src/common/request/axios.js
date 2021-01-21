@@ -56,14 +56,14 @@ export const clearPending = () => {
 };
 
 //设置全局默认的请求头
-axios.defaults.headers.token = localStorage.getItem('token');
+axios.defaults.headers.token = store.get('token');
 
 //请求拦截
 axios.interceptors.request.use(
     config => {
         removePending(config); // 在请求开始前，对之前的请求做检查取消操作
         addPending(config);// 将当前请求添加到 pending 中
-        axios.defaults.headers.token = localStorage.getItem('token');
+        config.headers.token = store.get('token');
         return config;
     },
     error => {
@@ -100,9 +100,10 @@ axios.interceptors.response.use(response => {
     error => {
         //注意，这里也是 resolve!!
         // 使用的时候不再关注catch
+        // 放心的 用 await 吧
         if (axios.isCancel(error)) {
             error.message = 'cancel';
-            return Promise.resolve(error);
+            return Promise.resolve(false);
         }
         if (error && error.response) {
             switch (error.response.status) {
@@ -150,7 +151,7 @@ axios.interceptors.response.use(response => {
             // router.push('/login');
         }
         Message.error(error.message)
-        return Promise.resolve(error);
+        return Promise.resolve(false);
     }
 );
 

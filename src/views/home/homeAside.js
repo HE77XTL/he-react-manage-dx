@@ -7,7 +7,7 @@ import styles from "./home.module.less";
 import store from 'store'
 
 const HomeAside = function (props) {
-    const menuList = store.get('menuList')
+    const menuList = store.get('menuList');
     const history = useHistory();
 
     const [menuStyle, setMenuStyle] = useState(menuStyleFmt(props.collapse))
@@ -61,7 +61,7 @@ const HomeAside = function (props) {
                   mode="inline"
                   theme="light"
                   inlineCollapsed={false}>
-                {menuList.map(item => {
+                {menuList && menuList.map(item => {
                     return menuFmt(item)
                 })}
             </Menu>

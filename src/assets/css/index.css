@@ -1,20 +1,32 @@
 /*布局---------------------------*/
+
+/*页面最外层样式*/
 .dsContent {
     background: #fff;
-    padding: 10px;
+    padding: 0 10px 10px;
     border-radius: 4px;
 }
 
 
 
+
+
+
 /*常用样式简写---------------------------*/
 
-.flex-cc {
+.ds-flex-cc {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.ds-border {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.ds-border-radius {
+    border-radius: 4px;
+}
 
 
 

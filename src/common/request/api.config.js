@@ -2,17 +2,17 @@ const apiConfig = {
     getApiRoot() {
         let webapi = "";
         if (process.env.NODE_ENV === 'development') {
-            const apiType = 2;
+            const apiType = 0;
             switch (apiType) {
                 case 0:
-                    webapi = "//10.88.15.160:13301/webapi";
+                    webapi = "//10.17.34.96:8101/webapi";// 测试环境
                     // order = "//192.168.31.63:8081/order";
                     // mall = "//192.168.31.63:8082/mall";
                     break;
                 case 1:
-                    webapi = "//10.88.15.160:13301/webapi";
+                    webapi = "//10.8.11.240:8101/webapi";// 甘德锦
                     break;
-                case 2://测试环境
+                case 2://业财（前期拿来项目搭建接口测试）
                     webapi = "//10.88.15.160:13301/webapi";
                     break;
                 default:

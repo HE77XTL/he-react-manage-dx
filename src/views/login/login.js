@@ -46,6 +46,8 @@ const Login = function (props) {
 
     async function onFinish() {
         Api.login(loginForm).then(res => {
+            console.log('login-----  res')
+            console.log(res)
             if (!res) return false;
 
             store.set('user', res);
@@ -54,7 +56,7 @@ const Login = function (props) {
 
 
             axios.defaults.headers.token = res.token;
-            history.push('/dashboard')
+            history.push('/bill')
         })
     }
 

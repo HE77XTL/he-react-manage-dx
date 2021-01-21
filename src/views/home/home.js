@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import React, {useState, useEffect} from "react";
-import {Button, Icon} from 'caihrc';
+import {Button, Breadcrumb } from 'caihrc';
 import HomeRouter from '../../router/home'
 import styles from './home.module.less'
 import Logo from '../../images/logo.png'
@@ -14,10 +14,11 @@ import { useHistory } from "react-router-dom";
 const Home = function () {
     const history = useHistory();
     const user = store.get('user');
+    const menuList = store.get('menuList');
 
     // 未登录，跳转到登陆页
     // 对于token 失效。在接口请求的时候做统一处理了
-    if(!user || !user.userName || !user.token) {
+    if(!user || !user.userName || !user.token || !menuList) {
         history.push('/login');
     }
 
