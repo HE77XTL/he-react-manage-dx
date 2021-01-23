@@ -1,12 +1,38 @@
+:root {
+    --ds-red: #ff3b30;
+    --ds-deep-red: #e3242b;
+
+}
+
+
+
 /*布局---------------------------*/
 
 /*页面最外层样式*/
 .dsContent {
     background: #fff;
-    padding: 0 10px 10px;
+    padding: 0 20px 20px;
     border-radius: 4px;
 }
 
+/*可点击文案*/
+.dsClickableText {
+    cursor: pointer;
+}
+.dsClickableRed {
+    color: var(--ds-red);
+    cursor: pointer;
+}
+.dsClickableRed:hover {
+    color: var(--ds-deep-red);
+}
+
+.dsRed {
+    color: var(--ds-red);
+}
+.deepRed {
+    color: var(--ds-deep-red);
+}
 
 
 
@@ -26,6 +52,41 @@
 
 .ds-border-radius {
     border-radius: 4px;
+}
+
+
+/*
+* 多行省略号
+*/
+.ds-ellipsis-2 {
+    /* autoprefixer: off */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+.ds-ellipsis-3 {
+    /* autoprefixer: off */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+.ds-ellipsis-1 {
+    /* autoprefixer: off */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.ds-ellipsis-single{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 

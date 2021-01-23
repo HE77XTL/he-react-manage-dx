@@ -19,7 +19,7 @@ const Home = function () {
     // 未登录，跳转到登陆页
     // 对于token 失效。在接口请求的时候做统一处理了
     if(!user || !user.userName || !user.token || !menuList) {
-        history.push('/login');
+        //history.push('/login');
     }
 
     const [collapse, setCollapse] = useState(false);

@@ -9,6 +9,7 @@ import About from '../views/about/about'
 import Dashboard from '../views/dashboard/dashboard'
 import SendStatistic from '../views/sendStatistic/sendStatistic'
 import SendDetail from '../views/sendDetail/sendDetail'
+import SuperSmsSend from '../views/superSmsSend/superSmsSend'
 
 const HomeRouter = function () {
     return (
@@ -18,6 +19,7 @@ const HomeRouter = function () {
                 <Route path="/bill"><Dashboard/></Route>
                 <Route path="/sendStatistic"><SendStatistic/></Route>
                 <Route path="/sendDetail"><SendDetail/></Route>
+                <Route path="/superSmsSend"><SuperSmsSend/></Route>
             </Switch>
         </Router>
     );

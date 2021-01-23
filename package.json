@@ -23,7 +23,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "store": "^2.0.12",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "xlsx": "^0.16.9"
   },
   "scripts": {
     "start": "cross-env REACT_APP_ENV=development react-app-rewired start",
