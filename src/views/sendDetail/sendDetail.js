@@ -16,13 +16,28 @@ const SendDetail = function () {
     if (!user) {
         history.push('/login');
     }
-    const [detailVisible, setDetailVisible] = useState(false);
+    const initPagination = {
+        current: 1,
+        defaultCurrent: 1,
+        defaultPageSize: 10,
+        pageSizeOptions: [10, 20, 50, 100],
+        total: 1,
+        showTotal: (total) => {
+            return '共' + total + '条数据';
+        },
+    };
+    const sendStatus = [
+        {label: "发送中", value: '99001'},
+        {label: "成功", value: '99002'},
+        {label: "失败", value: '99003'}];
+
+
     const [tableData, setTableData] = useState([]);
     const [searchForm, setSearchForm] = useState({
         page: 1,
         pageSize: 10,
     });
-
+    const [pagination, setPagination] = useState(initPagination);
     const searchItems = [
         {
             key: 'createTime',
@@ -52,19 +67,18 @@ const SendDetail = function () {
             type: 'select',
             name: '发送状态',
             searchValue: "",
-            options: [
-                {"label": "发送中", "value": 99001},
-                {"label": "成功", "value": 99002},
-                {"label": "失败", "value": 99003}],
+            options: sendStatus,
             placeholder: '请选择',
         },
 
     ];
     const [searchBoxData, setSearchBoxData] = useState(searchItems);
-
     const [smsTypeOptions, setSmsTypeOptions] = useState([]);
 
-    const [total, setTotal] = useState(21);
+    // 详情弹框（展示的和列表信息都一样，私以为，可以不要）
+    const [detailVisible, setDetailVisible] = useState(false);
+    const [smsDetail, setSmsDetail] = useState({});
+
 
     useEffect(() => {
         initData();
@@ -95,7 +109,7 @@ const SendDetail = function () {
             key: 'serialNumber',
             align: 'center',
             render(text, record, index) {
-                return index
+                return index + 1
             }
         },
         {
@@ -111,6 +125,12 @@ const SendDetail = function () {
             title: '手机号',
             dataIndex: 'toNumber',
             key: 'toNumber',
+            align: 'center',
+        },
+        {
+            title: '超信模板',
+            dataIndex: 'templateName',
+            key: 'templateName',
             align: 'center',
         },
         {
@@ -134,6 +154,14 @@ const SendDetail = function () {
             dataIndex: 'status',
             key: 'status',
             align: 'center',
+            render: (text, record) => {
+                return utils.typeTranslate(
+                    record.status,
+                    'value',
+                    'label',
+                    sendStatus
+                )
+            }
         },
         {
             title: '是否计费',
@@ -188,21 +216,13 @@ const SendDetail = function () {
             render: (text, record) => (
                 <div>
                     <div className="dsClickableRed" onClick={() => {
-                        sendDetail(text, record)
+                        onSendDetail(text, record)
                     }}>详情
                     </div>
                 </div>
             ),
         },
     ];
-    const pagination = {
-        defaultPageSize: 10,
-        pageSizeOptions: [10, 20, 50, 100],
-        total: total,
-        showTotal: (total) => {
-            return '共' + total + '条数据';
-        },
-    };
 
 
     function searchBtnClick(data) {
@@ -210,24 +230,23 @@ const SendDetail = function () {
         const searchFormFmt = Object.assign({}, searchForm, data, {
             createBeginTime: time,
             createEndTime: time,
+            // 点击搜索应该从第一页开始
             page: 1,
-            pageSize: 10
-        })
+        });
         setSearchForm(searchFormFmt);
-
-        console.log('searchForm4444')
-        console.log(searchFormFmt)
         getTables(searchFormFmt)
     }
 
 
     function getTables(params) {
         Api.querySmsItemList(params).then(res => {
-            console.log('table list----')
-            console.log(res)
             if (res === false) return;
             if (res && Array.isArray(res.entityList)) {
-                setTotal(res.pageInfo.totalCounts)
+                setPagination(Object.assign({}, initPagination, {
+                    total: res.pageInfo.totalCounts,
+                    current: res.pageInfo.page,
+                    pageSize: res.pageInfo.pagesize,
+                }));
                 setTableData(res.entityList);
             }
         })
@@ -250,28 +269,13 @@ const SendDetail = function () {
         })
     }
 
-
-    function sendDetail(text, record) {
-        getSmsDetail(record.messageId);
-        setDetailVisible(true);
+    async function onSendDetail(text, record) {
+        const detail = await Api.getSmsItem({messageId: record.messageId});
+        if (detail) {
+            setSmsDetail(detail);
+            setDetailVisible(true);
+        }
     }
-
-    function getSmsDetail(messageId) {
-        //messageId = '1334330261523607552'
-        Api.getSmsItem({messageId}).then(res => {
-            console.log('getSmsDetail')
-            console.log(res)
-        })
-    }
-
-    let data = {
-        userName: '王小二',
-        tel: '18677778888',
-        live: '广西壮族自治区',
-        remark: '-',
-        address: '广西壮族自治区南宁市良庆区道18号中国东信'
-    };
-
 
     function messageNode(content) {
         return (
@@ -288,8 +292,6 @@ const SendDetail = function () {
             page, pageSize
         });
         setSearchForm(searchFormFmt);
-        console.log(searchFormFmt)
-
         getTables(searchFormFmt)
     }
 
@@ -310,34 +312,112 @@ const SendDetail = function () {
             initialHeight={300}
         >
             <Descriptions layout="horizontal" column={1}>
-                <Descriptions.Item label="短信类型">{data.userName}</Descriptions.Item>
-                <Descriptions.Item label="手机号码">{data.tel}</Descriptions.Item>
-                <Descriptions.Item label="短信模板">{data.live}</Descriptions.Item>
-                <Descriptions.Item label="短信内容">{data.address}</Descriptions.Item>
-                <Descriptions.Item label="国家" span={4}>{data.remark}</Descriptions.Item>
+                <Descriptions.Item label="短信类型">{smsDetail.type}</Descriptions.Item>
+                <Descriptions.Item label="手机号码">{smsDetail.toNumber}</Descriptions.Item>
+                <Descriptions.Item label="短信模板">{smsDetail.templateName}</Descriptions.Item>
+                <Descriptions.Item label="短信内容">{smsDetail.message}</Descriptions.Item>
+                <Descriptions.Item label="国家" span={4}>{smsDetail.countryName}</Descriptions.Item>
             </Descriptions>
         </Modal>
     );
 
+    function onSearchChange(data) {
+        const time = data.createTime ? new Date(data.createTime) : '';
+        const searchFormFmt = Object.assign({}, searchForm, data, {
+            createBeginTime: time,
+            createEndTime: time,
+            // 点击搜索应该从第一页开始
+            page: 1,
+        });
+        setSearchForm(searchFormFmt);
+        console.log('onSearchChange------')
+        console.log(data)
+        console.log(searchFormFmt)
+    }
 
-    function excelExport(jsonData) {
-        const xxx = [
-            {
-                name: '部门统计',
-                sheet: [{department: "行政部", count: 2}, {department: "前端部", count: 2}]
-            },
-            {
-                name: '第二张sheet名字',
-                sheet: [{name: "张三", do: "整理文件"}, {name: "李四", do: "打印"}]
+    function excelExport() {
+        // 遍历对象是不能保证顺序的（虽然很多时候看起来是按顺序，依赖于浏览器规则）
+        // 为保证顺序，请不要将key 值设置为为负整数（Chrome Opera 会将数组提前）
+        const sheetHeader = {
+            index: '序号',
+            type: '短信类型',
+            toNumber: '手机号',
+            templateName: '超信模板',
+            message: '短信内容',
+            countryName: '国家',
+            status: '发送状态',
+            isBilling: '是否计费',
+            price: '计费金额',
+            createtime: '请求时间',
+            receivetime: '送达时间',
+        };
+        const sheetHeaderKey = Object.keys(sheetHeader);
+        const sheetHeaderValue = Object.values(sheetHeader);
+        Api.smsItemListExport(searchForm).then(res => {
+            if (res) {
+                // 数据需要翻译
+                const exportData = res.map((item, index) => {
+                    item.index = index + 1;
+                    item.type = utils.typeTranslate(
+                        item.type,
+                        'typeCode',
+                        'typeDesc',
+                        smsTypeOptions
+                    );
+                    item.status = utils.typeTranslate(
+                        item.status,
+                        'value',
+                        'label',
+                        sendStatus
+                    );
+
+                    item.isBilling = utils.typeTranslate(
+                        item.isBilling,
+                        'value',
+                        'name',
+                        [
+                            {
+                                value: 0,
+                                name: '否'
+                            },
+                            {
+                                value: 1,
+                                name: '是'
+                            }]
+                    );
+                    item.createtime = utils.dateToString(item.createtime, 'YYYY-MM-DD h:mm:ss')
+                    item.receivetime = utils.dateToString(item.receivetime, 'YYYY-MM-DD h:mm:ss')
+
+                    return sheetHeaderKey.map(headerKey => {
+                        return item[headerKey]
+                    });
+                });
+                exportData.unshift(sheetHeaderValue);
+
+                DsExcelExport([{
+                    name: "发送明细",
+                    colsWidth: [
+                        {wch: 8},
+                        {wch: 20},
+                        {wch: 20},
+                        {wch: 20},
+                        {wch: 50},
+                        {wch: 12},
+                        {wch: 10},
+                        {wch: 10},
+                        {wch: 10},
+                        {wch: 30},
+                        {wch: 30},
+                    ],
+                    sheet: exportData
+                }], '发送明细');
             }
-        ];
-
-        DsExcelExport(xxx, '表格1');
+        })
     }
 
     return (<div className='dsContent' style={{minWidth: '1200px'}}>
         <DsBreadcrumb crumbs={crumbs}/>
-        <DsSearchBox searcitems={searchBoxData} dsCallBack={searchBtnClick}/>
+        <DsSearchBox searcitems={searchBoxData} dsCallBack={searchBtnClick} onChange={onSearchChange}/>
         <div>
             <div style={{marginBottom: '10px'}}>
                 <Button type='danger' onClick={() => {

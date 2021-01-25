@@ -1,9 +1,16 @@
+/*z-index 区域划分
+*0-10 背景
+*10-100 页面层级
+*100-500 弹框
+*999 loading 层
+*/
+
+
 :root {
     --ds-red: #ff3b30;
     --ds-deep-red: #e3242b;
 
 }
-
 
 
 /*布局---------------------------*/
@@ -19,10 +26,12 @@
 .dsClickableText {
     cursor: pointer;
 }
+
 .dsClickableRed {
     color: var(--ds-red);
     cursor: pointer;
 }
+
 .dsClickableRed:hover {
     color: var(--ds-deep-red);
 }
@@ -30,12 +39,10 @@
 .dsRed {
     color: var(--ds-red);
 }
+
 .deepRed {
     color: var(--ds-deep-red);
 }
-
-
-
 
 
 /*常用样式简写---------------------------*/
@@ -66,6 +73,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 }
+
 .ds-ellipsis-3 {
     /* autoprefixer: off */
     overflow: hidden;
@@ -74,6 +82,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
 }
+
 .ds-ellipsis-1 {
     /* autoprefixer: off */
     overflow: hidden;
@@ -83,7 +92,7 @@
     -webkit-line-clamp: 1;
 }
 
-.ds-ellipsis-single{
+.ds-ellipsis-single {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

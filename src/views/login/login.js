@@ -56,7 +56,7 @@ const Login = function (props) {
 
 
             axios.defaults.headers.token = res.token;
-            history.push('/bill')
+            history.push('/sendStatistic')
         })
     }
 

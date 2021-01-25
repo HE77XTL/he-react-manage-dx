@@ -5,13 +5,10 @@ function ExcelExport(jsonData, exportFileName) {
     // jsonData 格式：
     // [
     //     {
+    //         colsWidth: [],
     //         name: '部门统计',
-    //         sheet: [{department: "行政部", count: 2}, {department: "前端部", count: 2}]
+    //         sheet: [[1,2],[3,4]]
     //     },
-    //     {
-    //         name: '第二张sheet名字',
-    //         sheet: [{name: "张三", do: "整理文件"}, {name: "李四", do: "打印"}]
-    //     }
     // ];
 
     if (!jsonData || !Array.isArray(jsonData)) {
@@ -19,10 +16,15 @@ function ExcelExport(jsonData, exportFileName) {
     }
     /* create a new blank workbook */
     let wb = XLSX.utils.book_new();
+
     for (let item of jsonData) {
-        const sheetFmt = XLSX.utils.json_to_sheet(item.sheet);
+        const sheetFmt = XLSX.utils.aoa_to_sheet(item.sheet);
+        item.colsWidth && (sheetFmt['!cols'] = item.colsWidth);
+
         XLSX.utils.book_append_sheet(wb, sheetFmt, item.name);
     }
+
+
     const workbookBlob = workbook2blob(wb);
     const fileName = exportFileName || `下载文件`;
     openDownloadDialog(workbookBlob, `${fileName}.xlsx`);

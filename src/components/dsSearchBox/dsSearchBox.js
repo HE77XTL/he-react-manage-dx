@@ -20,8 +20,6 @@ const DsSearchBox = function (props) {
                 [currentValue.key]: currentValue.searchValue
             })
         }, {});
-        console.log('searchData')
-        console.log(searchData)
         setSearchForm(searchData)
     }, []);
 
@@ -52,13 +50,12 @@ const DsSearchBox = function (props) {
                     [item.key]: e
                 });
         }
+        props.onChange(formData);
         setSearchForm(formData)
 
     }
 
     function onOperateClick() {
-        console.log('searchForm')
-        console.log(searchForm)
         props.dsCallBack(searchForm)
     }
 

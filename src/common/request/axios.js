@@ -26,9 +26,6 @@ axios.interceptors.request.use(
 //响应拦截----
 axios.interceptors.response.use(response => {
         const router = new HashRouter();
-        console.log('response响应拦截----')
-        console.log(response)
-        console.log('response响应拦截----')
         if (response.status === 200) {
             if (response.data.retCode === '403') {
                 Message.error(response.data.message);
@@ -132,10 +129,8 @@ const request = {
         return axios({
             method: 'post',
             url: url,
-            data: qs.stringify(params),
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+            headers: {'Content-Type': 'multipart/form-data',},
+            data: params,
         });
     },
 

@@ -5,15 +5,20 @@ import {DeleteOutlined, LinkOutlined} from '@ant-design/icons';
 import DsBreadcrumb from '../../components/dsBreadcrumb/dsBreadcrumb'
 import classnames from 'classnames'
 
-import store from "store";
-
 import Api from '../../common/request/api/api'
 
 
 import styles from './superSmsSend.module.less'
 
 const SuperSmsSend = function () {
-    const user = store.get('user');
+    const crumbs = [
+        {
+            value: 'superSmsSend',
+            name: '超信发送任务',
+            url: ''
+        },
+    ];
+    const [form] = Form.useForm();
 
     const [contentList, setContentList] = useState([
         {
@@ -26,14 +31,6 @@ const SuperSmsSend = function () {
             tipsText: '仅支持.txt格式'
         }
     ]);
-
-    const crumbs = [
-        {
-            value: 'superSmsSend',
-            name: '超信发送任务',
-            url: ''
-        },
-    ];
 
     function upLoadChange(info, item, index) {
         let fileList = [...info.fileList];
@@ -62,27 +59,118 @@ const SuperSmsSend = function () {
         const tipsText = e === 1 ? '仅支持.jpg、.jpeg、.png 格式，大小不超过2M' : '仅支持.txt格式';
         const contentFmt = contentList[index];
         contentFmt.tipsText = tipsText;
+        contentFmt.type = e;
         const newContentList = contentList.concat();
         newContentList.splice(index, 1, contentFmt);
+        console.log(newContentList)
         setContentList(newContentList)
+    }
+
+    function onFinish() {
+        const result = contentValid();
+        confirmModel(result.message, result.status)
+    }
+
+    function onFinishFailed(errorInfo) {
+        // 判断验证不通过第一项是不是 模板名称
+        console.log('Failed:', errorInfo.errorFields[0]);
+        const errName = errorInfo.errorFields[0].name;
+        const mes = errorInfo.errorFields[0].errors.join('') || '请填写完整';
+        if (errName.includes('templateName')) {
+            confirmModel(mes);
+            return
+        }
+        const result = contentValid();
+        if (result.status === 'fail') {
+            confirmModel(result.message);
+            return
+        }
+        confirmModel(mes);
+    }
+
+
+    // 超信内容自定义校验规则
+
+    const contentValid = () => {
+        let validResult = {
+            status: 'success',
+            message: '是否确认提交？'
+        };
+
+        if (contentList.length === 0) {
+            validResult.status = 'fail';
+            validResult.message = '请添加超信内容';
+        }
+        for (let fileObj of contentList) {
+            if (!fileObj.fileList || fileObj.fileList.length === 0) {
+                if (fileObj.type === 0) {
+                    // 文本
+                    validResult.status = 'fail';
+                    validResult.message = '请添加超信文本';
+                } else {
+                    // 图片
+                    validResult.status = 'fail';
+                    validResult.message = '请添加超信图片';
+                }
+                break
+            }
+        }
+        return validResult
+    }
+
+    function confirmModel(message, type) {
+        Modal.confirm({
+            title: '提示',
+            okText: '确认',
+            cancelText: '取消',
+            content: message,
+            onOk: () => {
+                if (type === 'success') {
+                    onSubmit()
+                }
+            }
+        })
+    }
+
+
+    function onSubmit() {
+        const formData = form.getFieldsValue();
+        let data = new FormData();
+        for (let key in formData) {
+            if (key !== 'file') {
+                data.append([key], [formData[key]]);
+            }
+        }
+        for (let item of contentList) {
+            data.append('file', item.fileList[0]);
+        }
+        Api.sendSuperSMS(data)
     }
 
 
     return (<div className='dsContent'>
         <DsBreadcrumb crumbs={crumbs}/>
         <div className={styles.superSmsSend}>
-            <Form>
+            <Form form={form} name="superSmsTask" onFinish={onFinish} onFinishFailed={onFinishFailed}>
                 <Form.Item
                     label="模板名称"
                     name="templateName"
-                    rules={[{required: true, message: 'Please input your username!'}]}
+                    rules={[{required: true, message: '请添加任务名称'}]}
                 >
                     <Input type="text" style={{width: '200px'}}/>
                 </Form.Item>
+
                 <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[{required: true, message: 'Please input your username!'}]}
+                    label="内容类型"
+                    name="file"
+                    rules={[
+                        {
+                            required: true,
+                            validator: async () => {
+                                Promise.resolve('')
+                            },
+                        },
+                    ]}
                 >
                     <div>
                         {contentList.map((contentItem, index) => {
@@ -124,7 +212,6 @@ const SuperSmsSend = function () {
                                 </div>
                             )
                         })}
-
                         <div style={{width: '300px'}}>
                             <Button block onClick={() => {
                                 addContent()
@@ -133,18 +220,27 @@ const SuperSmsSend = function () {
                     </div>
                 </Form.Item>
                 <Form.Item
+                    label="超信主题"
+                    name="subject"
+                    rules={[{required: true, message: '请添加超信主题'}]}
+                >
+                    <Input type="text" style={{width: '200px'}}/>
+                </Form.Item>
+                <Form.Item
                     label="接收号码"
-                    name="toNumber"
-                    rules={[{required: true, message: 'Please input your username!'}]}
+                    name="toNumberList"
+                    rules={[{required: true, message: '发送号码不能为空'}]}
                 >
                     <Input type="textarea"
                            autoSize={{minRows: 6}}
                            value="type=textarea" style={{width: '480px'}}/>
                 </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                        提交
+                    </Button>
+                </Form.Item>
             </Form>
-            <div>
-                <Button type="primary">提交</Button>
-            </div>
         </div>
     </div>)
 }

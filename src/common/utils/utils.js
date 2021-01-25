@@ -29,11 +29,19 @@ const utils = {
     },
     dateToString(date, formatType) {
         // 如果传进来的是非法date, 则返回 '-'
-        const xx = Moment(date).isValid();
-        if (xx === false || !date) {
+        const isValid = Moment(date).isValid();
+        if (isValid === false || !date) {
+            return '-'
+        } else {
+            return Moment(date).format(formatType)
+        }
+    },
+    emptyFilter(data) {
+        // '' | null | undefined  返回 "-"
+        if(!data && data !== 0) {
             return '-'
         }else {
-            return Moment(date).format(formatType)
+            return data
         }
     }
 };

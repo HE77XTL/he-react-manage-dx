@@ -4,6 +4,7 @@ import Logo from "../../images/logo.png";
 import DsIcon from "../../components/dsIcon/dsIcon";
 import Events from '../../common/utils/Events'
 import Api from '../../common/request/api/api'
+import utils from '../../common/utils/utils'
 
 import {useHistory} from 'react-router-dom'
 
@@ -14,6 +15,10 @@ import {DownOutlined, UpOutlined} from '@ant-design/icons';
 
 const HomeHeader = function (props) {
     const history = useHistory();
+    const user = store.get('user') || {}; // 能进入首页，而不跳转到登陆页，认为已经登陆了。即已经通过登陆接口获取到用户信息
+
+//--- useState ----------------------
+
     const [iconStyle, setIconStyle] = useState(iconFmt(props.collapse));
     const [iconState, setIconState] = useState('close');
     const [editFormVisible, setEditFormVisible] = useState(false);
@@ -23,8 +28,23 @@ const HomeHeader = function (props) {
         sureNewPassword: ''
     });
 
-    // 能进入首页，而不跳转到登陆页，认为已经登陆了。即已经通过登陆接口获取到用户信息
-    const user = store.get('user') || {};
+    const [useMoney, setUseMoney] = useState(0);
+
+
+//--- useEffect ------------------------
+
+    useEffect(() => {
+        initData()
+    }, []);
+
+//--- function --------------------
+    function initData() {
+        Api.getCredit({Rounding: 132}).then(res => {
+            console.log('getCredit----')
+            console.log(res)
+        })
+    }
+
 
     function updateEditPassword(e) {
         setEditPassword(Object.assign({}, editPassword, e))
@@ -75,7 +95,7 @@ const HomeHeader = function (props) {
                     id: user.id,
                 });
                 Api.modifyPassword(params).then(res => {
-                    if(res) {
+                    if (res) {
                         Message.success("修改成功");
                         setEditFormVisible(false);
                         history.push('/login')
@@ -142,22 +162,23 @@ const HomeHeader = function (props) {
 
     return (<div className={styles.homeHeader}>
         <img src={Logo} className={styles.logo} alt="logo"/>
-        <div className={styles.collapseButton} onClick={onCollapseChange}>
-            <DsIcon
-                size="24"
-                color={iconStyle.color}
-                name={iconStyle.name}
-            />
+        <div style={{flex: 1}}>
+            <div className={styles.collapseButton} onClick={onCollapseChange}>
+                <DsIcon
+                    size="24"
+                    color={iconStyle.color}
+                    name={iconStyle.name}
+                />
+            </div>
         </div>
-
+        <div>
+            可用额度: <span className="dsRed">{utils.emptyFilter(useMoney)}元</span>
+        </div>
         <div className={styles.user}>
             <Dropdown overlay={menu}
                       trigger="click"
                       placement="bottomCenter"
                       onVisibleChange={visible => {
-                          console.log('visible')
-                          console.log(visible)
-                          console.log('visible')
                           setIconState(visible ? 'open' : 'close');
                       }}>
                 <a onClick={e => e.preventDefault()} className={styles.userName}>

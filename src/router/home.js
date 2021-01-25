@@ -20,6 +20,7 @@ const HomeRouter = function () {
                 <Route path="/sendStatistic"><SendStatistic/></Route>
                 <Route path="/sendDetail"><SendDetail/></Route>
                 <Route path="/superSmsSend"><SuperSmsSend/></Route>
+                <Route path="/"><SendStatistic/></Route>
             </Switch>
         </Router>
     );

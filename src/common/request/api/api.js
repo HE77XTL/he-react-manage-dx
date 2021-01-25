@@ -11,6 +11,10 @@ const api = {
     logout: p => request.post(webapi + '/logout', p),// 退出
     modifyPassword: p => request.post(webapi + '/user/modifyPassword', p),// 修改登陆密码
 
+
+    getCredit: p => request.post(webapi + '/portal/getCredit', p),// 可用额度
+
+    getSendCountData: p => request.post(webapi + '/portal/getSendCountData', p),// 发送统计
     querySmsItemList: p => request.post(webapi + '/portal/querySmsItemList', p),// 发送详情列表
     smsItemListExport: p => request.post(webapi + '/portal/getSmsItemList', p),// Excel获取数据接口
 
@@ -20,7 +24,7 @@ const api = {
     querySendType: p => request.post(webapi + '/portal/querySendType', p),// 获取短信类型
 
 
-    sendSuperSMS: p => request.upload(webapish + '/portal/sendSuperSMS', p),// 发送超级短信任务
+    sendSuperSMS: p => request.upload(webapi + '/portal/sendSuperSMS', p),// 发送超级短信任务
 
 
 };
