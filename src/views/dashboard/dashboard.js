@@ -3,6 +3,8 @@ import {Button} from 'caihrc';
 
 import Api from '../../common/request/api/api';
 
+import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl';
+
 import XLSX from "xlsx";
 
 import axios from 'axios'
@@ -42,6 +44,13 @@ const Dashboard = function () {
         </div>
         <div>
             <Button onClick={exportExcel}>导出</Button>
+        </div>
+
+        <div>
+            <div>国际化测试</div>
+            <div>
+                <FormattedMessage id="intl_breadcrumb"/>
+            </div>
         </div>
     </div>)
 }

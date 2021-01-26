@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import Router from './router/router'
 import './assets/css/index.css'
 
-
 ReactDOM.render(
-    <Router />,
+    <Router/>,
     document.getElementById('root')
 );
 

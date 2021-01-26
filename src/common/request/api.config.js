@@ -24,9 +24,6 @@ const apiConfig = {
                     webapi = "//10.8.11.61:8101/webapi";//覃士蘅
                     webapish = "//10.8.11.61:8101";// 覃士蘅
                     break;
-
-
-                    //http://10.8.11.61:8101/portal/sendSuperSMS
                 default:
                     webapi = "//10.88.15.160:13301/webapi";
                     webapish = "//10.88.15.160:13301";// 覃士蘅
@@ -34,7 +31,7 @@ const apiConfig = {
 
         } else {
             // 部署
-            const baseAPI = process.env.VUE_APP_API === 'test' ? '//10.88.15.160:13301/' : "//10.88.15.160:13301/";
+            const baseAPI = process.env.VUE_APP_API === 'test' ? '//10.17.34.96:8101/webapi/' : "//10.17.34.96:8101/webapi";
             webapi = baseAPI + 'webapi';
             // mall = baseAPI + 'mall';
             // order = baseAPI + 'order';

@@ -17,6 +17,17 @@ const HomeHeader = function (props) {
     const history = useHistory();
     const user = store.get('user') || {}; // 能进入首页，而不跳转到登陆页，认为已经登陆了。即已经通过登陆接口获取到用户信息
 
+    const languageOptions = [
+        {
+            type: 'zh',
+            name: '中文',
+        },
+        {
+            type: 'en',
+            name: 'English',
+        }
+    ];
+
 //--- useState ----------------------
 
     const [iconStyle, setIconStyle] = useState(iconFmt(props.collapse));
@@ -30,6 +41,8 @@ const HomeHeader = function (props) {
 
     const [useMoney, setUseMoney] = useState(0);
 
+    const [language, setLanguage] = useState('English');
+
 
 //--- useEffect ------------------------
 
@@ -39,12 +52,12 @@ const HomeHeader = function (props) {
 
 //--- function --------------------
     function initData() {
-        Api.getCredit({Rounding: 132}).then(res => {
-            console.log('getCredit----')
-            console.log(res)
+        Api.getCredit().then(res => {
+            if (res) {
+                setUseMoney(res.credit)
+            }
         })
     }
-
 
     function updateEditPassword(e) {
         setEditPassword(Object.assign({}, editPassword, e))
@@ -63,6 +76,12 @@ const HomeHeader = function (props) {
             ? {name: 'ds-icon-arrow-right', color: '#00AAFF'}
             : {name: 'ds-icon-arrow-left', color: '#333'}
     }
+
+    function languageChange(item) {
+        setLanguage(item.name);
+        Events.emit("languageChange", item.type);
+    }
+
 
     function logout() {
         Modal.confirm({
@@ -159,6 +178,18 @@ const HomeHeader = function (props) {
         </Menu>
     );
 
+    const LanguageNode = (
+        <Menu>
+            {languageOptions.map((item, index) => {
+                return (<Menu.Item key={index}>
+                    <a onClick={() => {
+                        languageChange(item)
+                    }}>{item.name}</a>
+                </Menu.Item>)
+            })}
+        </Menu>
+    );
+
 
     return (<div className={styles.homeHeader}>
         <img src={Logo} className={styles.logo} alt="logo"/>
@@ -172,7 +203,7 @@ const HomeHeader = function (props) {
             </div>
         </div>
         <div>
-            可用额度: <span className="dsRed">{utils.emptyFilter(useMoney)}元</span>
+            可用额度: <span className="dsRed">{utils.emptyFilter(useMoney)}</span>
         </div>
         <div className={styles.user}>
             <Dropdown overlay={menu}
@@ -183,6 +214,19 @@ const HomeHeader = function (props) {
                       }}>
                 <a onClick={e => e.preventDefault()} className={styles.userName}>
                     {user.userName} {iconState == 'close' ? <DownOutlined/> : <UpOutlined/>}
+                </a>
+            </Dropdown>
+            {editPasswordModal}
+        </div>
+        <div className={styles.language}>
+            <Dropdown overlay={LanguageNode}
+                      trigger="click"
+                      placement="bottomCenter"
+                      onVisibleChange={visible => {
+                          setIconState(visible ? 'open' : 'close');
+                      }}>
+                <a onClick={e => e.preventDefault()} className={styles.userName}>
+                    {language} {iconState == 'close' ? <DownOutlined/> : <UpOutlined/>}
                 </a>
             </Dropdown>
             {editPasswordModal}
