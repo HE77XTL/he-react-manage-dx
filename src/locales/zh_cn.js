@@ -7,8 +7,22 @@ const zh_cn = {
     login_userNamePlaceholder: '请输入用户名称',
     login_passwordPlaceholder: '请输入密码',
     login_validCodePlaceholder: '请输入验证码',
-    login_loginBtnText  : '登录',
+    login_loginBtnText: '登录',
 
+    // 首页------
+    home_userCredit: '可用额度',
+    home_logout: '退出',
+    home_logoutConfirm: '确认退出吗？',
+    home_confirm: '确定',
+    home_cancel: '取消',
+    home_modifyPassword: '修改密码',
+    home_oldPassword: '原密码',
+    home_oldPasswordPlaceholder: '请输入原密码',
+    home_newPassword: '新密码',
+    home_newPasswordPlaceholder: '请输入新密码',
+    home_newPasswordConfirm: '确认新密码',
+    home_newPasswordAgain: '再次输入新密码',
+    home_editSuccess: '修改成功',
 
 
     intl_breadcrumb: '国际化产品',

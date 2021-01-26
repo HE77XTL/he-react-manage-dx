@@ -7,8 +7,22 @@ const en = {
     login_userNamePlaceholder: 'Please enter username',
     login_passwordPlaceholder: 'Please enter password',
     login_validCodePlaceholder: 'Please enter verify code',
-    login_loginBtnText  : 'Login',
+    login_loginBtnText: 'Login',
 
+    // 首页------
+    home_userCredit: 'Available credit',
+    home_logout: 'Logout',
+    home_logoutConfirm: 'Are you sure to log out?',
+    home_confirm: 'Confirm',
+    home_cancel: 'Cancel',
+    home_modifyPassword: 'Change password',
+    home_oldPassword: 'Original password',
+    home_oldPasswordPlaceholder: 'Please enter the original password',
+    home_newPassword: 'New password',
+    home_newPasswordPlaceholder: 'Please enter the new password',
+    home_newPasswordConfirm: 'Confirm password',
+    home_newPasswordAgain: 'Enter the new password again',
+    home_editSuccess: 'Change Success',
 
     intl_breadcrumb: 'International Products',
     breadcrumb: 'International Products',

@@ -11,12 +11,16 @@ import {useHistory} from 'react-router-dom'
 import store from 'store'
 import {Button, Modal, Dropdown, Menu, Message, Form, Input} from 'caihrc'
 import {DownOutlined, UpOutlined} from '@ant-design/icons';
+import {useTranslation} from "react-i18next";
+import AntZhCN from "caihrc/lib/locale/zh_CN";
+import AntEnGB from "caihrc/lib/locale/en_GB";
 
 
 const HomeHeader = function (props) {
+    const languageType = store.get('languageType') || 'en';
     const history = useHistory();
+    const {t, i18n} = useTranslation();
     const user = store.get('user') || {}; // 能进入首页，而不跳转到登陆页，认为已经登陆了。即已经通过登陆接口获取到用户信息
-
     const languageOptions = [
         {
             type: 'zh',
@@ -38,10 +42,9 @@ const HomeHeader = function (props) {
         newPassword: '',
         sureNewPassword: ''
     });
-
     const [useMoney, setUseMoney] = useState(0);
-
-    const [language, setLanguage] = useState('English');
+    const [language, setLanguage] = useState(getLanguageText(languageType));
+    const [editPasswordLabelCol, setEditPasswordLabelCol] = useState(passwordLabelColChange(languageType));
 
 
 //--- useEffect ------------------------
@@ -81,8 +84,10 @@ const HomeHeader = function (props) {
         i18next.changeLanguage(item.type).catch(() => {
             Message.error("change language fail")
         });
+        store.set("languageChange", item.type)
         Events.emit("languageChange", item.type);
         setLanguage(item.name);
+        setEditPasswordLabelCol(passwordLabelColChange(item.type))
     }
 
 
@@ -103,12 +108,35 @@ const HomeHeader = function (props) {
         });
     }
 
+    // 修改密码弹框中label 宽度，根据不同语言进行设置
+
+    function passwordLabelColChange(languageType) {
+        switch (languageType) {
+            case 'zh':
+                return 5;
+            case 'en':
+                return 7;
+            default:
+                return 7;
+        }
+    }
+
+    function getLanguageText(languageType) {
+        let text = 'English'
+        for (let item of languageOptions) {
+            if (languageType === item.type) {
+                text = item.name
+            }
+        }
+        return text
+    }
+
 
     const editPasswordModal = (
         <Modal
-            okText="确定"
-            cancelText="取消"
-            title="修改密码"
+            okText={t('home_confirm')}
+            cancelText={t('home_cancel')}
+            title={t('home_modifyPassword')}
             maskClosable={false}
             visible={editFormVisible}
             onOk={() => {
@@ -118,7 +146,7 @@ const HomeHeader = function (props) {
                 });
                 Api.modifyPassword(params).then(res => {
                     if (res) {
-                        Message.success("修改成功");
+                        Message.success(t('home_editSuccess'));
                         setEditFormVisible(false);
                         history.push('/login')
                     }
@@ -131,14 +159,12 @@ const HomeHeader = function (props) {
                 setEditFormVisible(false);
                 setIconState('close');
             }}
-            initialWidth={600}
-            initialHeight={300}
         >
-            <Form labelCol={{span: 5}} style={{paddingRight: '12px'}}>
+            <Form labelCol={{span: editPasswordLabelCol}} style={{paddingRight: '12px'}}>
                 <Form.Item
-                    label="原密码"
+                    label={t('home_oldPassword')}
                     name="oldPassword"
-                    rules={[{required: true, message: '请输入原密码'}]}>
+                    rules={[{required: true, message: t('home_oldPasswordPlaceholder')}]}>
                     <Input.Password
                         value={editPassword.oldPassword}
                         onChange={(e) => {
@@ -146,9 +172,9 @@ const HomeHeader = function (props) {
                         }}/>
                 </Form.Item>
                 <Form.Item
-                    label="新密码"
+                    label={t('home_newPassword')}
                     name="newPassword"
-                    rules={[{required: true, message: '请输入新密码'}]}>
+                    rules={[{required: true, message: t('home_newPasswordPlaceholder')}]}>
                     <Input.Password
                         value={editPassword.newPassword}
                         onChange={(e) => {
@@ -156,9 +182,9 @@ const HomeHeader = function (props) {
                         }}/>
                 </Form.Item>
                 <Form.Item
-                    label="确认新密码"
+                    label={t('home_newPasswordConfirm')}
                     name="sureNewPassword"
-                    rules={[{required: true, message: '请再次输入新密码'}]}>
+                    rules={[{required: true, message: t('home_newPasswordAgain')}]}>
                     <Input.Password
                         value={editPassword.sureNewPassword}
                         onChange={(e) => {
@@ -176,7 +202,7 @@ const HomeHeader = function (props) {
                 <a onClick={() => {
                     setEditPassword({});
                     setEditFormVisible(true);
-                }}>修改密码</a>
+                }}> {t('home_modifyPassword')}</a>
             </Menu.Item>
         </Menu>
     );
@@ -206,7 +232,7 @@ const HomeHeader = function (props) {
             </div>
         </div>
         <div>
-            可用额度: <span className="dsRed">{utils.emptyFilter(useMoney)}</span>
+            {t('home_userCredit')} : <span className="dsRed">{utils.emptyFilter(useMoney)}</span>
         </div>
         <div className={styles.user}>
             <Dropdown overlay={menu}
