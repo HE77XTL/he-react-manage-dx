@@ -7,17 +7,26 @@ import {
 
 import Home from '../views/home/home'
 import Login from '../views/login/login'
-import zh_CN from "../locales/zh_cn";
-import en from "../locales/en";
+import PageZhCN from "../locales/zh_cn";
+import PageEn from "../locales/en";
 import Events from "../common/utils/Events";
 import {IntlProvider} from "react-intl";
+
+
+import AntZhCN from 'caihrc/lib/locale/zh_CN';
+import AntEnGB from 'caihrc/lib/locale/en_GB';
+
+
+import ConfigProvider from 'caihrc/lib/config-provider';
 
 
 export default function App() {
 
     const [languageOptions, setLanguageOptions] = useState({
         locale: 'zh',
-        localeMessages: zh_CN
+        localeMessages: PageZhCN,
+        ant: AntZhCN,
+
     });
 
 
@@ -32,32 +41,41 @@ export default function App() {
     function getLanguageMes(type) {
         switch (type) {
             case 'zh':
-                return zh_CN;
+                return {
+                    localeMessages: PageZhCN,
+                    ant: AntZhCN,
+                };
             case 'en':
-                return en;
+                return {
+                    localeMessages: PageEn,
+                    ant: AntEnGB,
+                };
             default:
-                return en
+                return {
+                    localeMessages: PageEn,
+                    ant: AntEnGB,
+                };
         }
     }
 
     function languageChange(e) {
-        console.log('languageChange')
-        console.log(e)
         setLanguageOptions({
             locale: e,
-            localeMessages: getLanguageMes(e)
+            ...getLanguageMes(e)
         })
     }
 
 
     return (
         <IntlProvider locale={languageOptions.locale} messages={languageOptions.localeMessages}>
-            <Router>
-                <Switch>
-                    <Route path="/login"><Login/></Route>
-                    <Route path="/"><Home/></Route>
-                </Switch>
-            </Router>
+            <ConfigProvider locale={AntZhCN}>
+                <Router>
+                    <Switch>
+                        <Route path="/login"><Login/></Route>
+                        <Route path="/"><Home/></Route>
+                    </Switch>
+                </Router>
+            </ConfigProvider>
         </IntlProvider>
     );
 }

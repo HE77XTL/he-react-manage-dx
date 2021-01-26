@@ -1,9 +1,9 @@
 import React from 'react';
-import {Button} from 'caihrc';
+import {Button, Input} from 'caihrc';
 
 import Api from '../../common/request/api/api';
 
-import { IntlProvider, FormattedMessage, addLocaleData } from 'react-intl';
+import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
 
 import XLSX from "xlsx";
 
@@ -50,6 +50,7 @@ const Dashboard = function () {
             <div>国际化测试</div>
             <div>
                 <FormattedMessage id="intl_breadcrumb"/>
+                <Input/>
             </div>
         </div>
     </div>)
