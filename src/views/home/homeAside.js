@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {Menu} from 'caihrc';
-//import menuList from './menuList'
 import {useHistory} from "react-router-dom";
 import DsIcon from '../../components/dsIcon/dsIcon'
 import styles from "./home.module.less";
@@ -59,7 +58,7 @@ const HomeAside = function (props) {
                   defaultSelectedKeys={['input']}
                   defaultOpenKeys={['sub1']}
                   mode="inline"
-                  theme="light"
+                  theme="dark"
                   inlineCollapsed={false}>
                 {menuList && menuList.map(item => {
                     return menuFmt(item)

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import {Form, Input, Button} from 'caihrc';
 import {UserOutlined, LockOutlined, ReloadOutlined, SafetyCertificateOutlined} from '@ant-design/icons';
@@ -8,11 +8,15 @@ import apiConfig from "../../common/request/api.config";
 import Api from '../../common/request/api/api'
 import styles from './login.module.less'
 
-import store from 'store'
 
+import store from 'store'
+import {useTranslation} from "react-i18next";
 
 
 const Login = function (props) {
+    const {t, i18n} = useTranslation();
+
+
     const history = useHistory();
 
     const [loginForm, setLoginForm] = useState({
@@ -68,7 +72,7 @@ const Login = function (props) {
     return (
         <div className={styles.login}>
             <div className={styles.formPanel}>
-                <h2 className={styles.title}>短信可视化平台</h2>
+                <h2 className={styles.title}>{t('login_title')}</h2>
                 <Form
                     requiredMark={false}
                     name="basic"
@@ -77,37 +81,37 @@ const Login = function (props) {
                     onFinishFailed={onFinishFailed}>
                     <Form.Item
                         name="loginAccount"
-                        rules={[{required: true, message: '请输入账号'}]}>
+                        rules={[{required: true, message: t('login_userNamePlaceholder')}]}>
                         <Input value={loginForm.loginAccount}
                                onChange={(e) => {
                                    updateLoinForm({loginAccount: e.target.value})
                                }}
                                size="large"
-                               placeholder="请输入账号"
+                               placeholder={t('login_userNamePlaceholder')}
                                prefix={<UserOutlined/>}/>
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[{required: true, message: '请输入密码'}]}>
+                        rules={[{required: true, message: t('login_passwordPlaceholder')}]}>
                         <Input.Password
                             value={loginForm.password}
                             onChange={(e) => {
                                 updateLoinForm({password: e.target.value})
                             }}
                             size="large"
-                            placeholder="请输入密码"
+                            placeholder={t('login_passwordPlaceholder')}
                             prefix={<LockOutlined/>}/>
                     </Form.Item>
                     <div className={styles.validItem}>
                         <Form.Item
                             name="verification"
-                            rules={[{required: true, message: '请输入验证码'}]}>
+                            rules={[{required: true, message: t('login_validCodePlaceholder')}]}>
                             <Input value={loginForm.verification}
                                    onChange={(e) => {
                                        updateLoinForm({verification: e.target.value})
                                    }}
                                    size="large"
-                                   placeholder="请输入验证码"
+                                   placeholder={t('login_validCodePlaceholder')}
                                    prefix={<SafetyCertificateOutlined/>}/>
                         </Form.Item>
                         <img src={validImgSrc} alt="validImg" className={styles.validImg}/>
@@ -118,7 +122,7 @@ const Login = function (props) {
 
                     <Form.Item>
                         <Button type="primary" block htmlType="submit">
-                            登陆
+                            {t('login_loginBtnText')}
                         </Button>
                     </Form.Item>
                 </Form>

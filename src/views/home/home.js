@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 import {Button, Breadcrumb, Spin} from 'caihrc';
 import HomeRouter from '../../router/home'
 import styles from './home.module.less'
-import Logo from '../../images/logo.png'
+
 import DsIcon from '../../components/dsIcon/dsIcon'
 import HomeAside from './homeAside'
 import Events from '../../common/utils/Events'

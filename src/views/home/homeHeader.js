@@ -1,17 +1,17 @@
 import React, {useState, useEffect} from 'react';
+import i18next from "i18next";
+
 import styles from "./home.module.less";
-import Logo from "../../images/logo.png";
+import Logo from "../../images/logo.jpg";
 import DsIcon from "../../components/dsIcon/dsIcon";
 import Events from '../../common/utils/Events'
 import Api from '../../common/request/api/api'
 import utils from '../../common/utils/utils'
-
 import {useHistory} from 'react-router-dom'
-
 import store from 'store'
-
 import {Button, Modal, Dropdown, Menu, Message, Form, Input} from 'caihrc'
 import {DownOutlined, UpOutlined} from '@ant-design/icons';
+
 
 const HomeHeader = function (props) {
     const history = useHistory();
@@ -78,8 +78,11 @@ const HomeHeader = function (props) {
     }
 
     function languageChange(item) {
-        setLanguage(item.name);
+        i18next.changeLanguage(item.type).catch(() => {
+            Message.error("change language fail")
+        });
         Events.emit("languageChange", item.type);
+        setLanguage(item.name);
     }
 
 

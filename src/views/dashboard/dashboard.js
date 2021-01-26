@@ -1,16 +1,10 @@
 import React from 'react';
-import {Button, Input} from 'caihrc';
-
+import {Button, DatePicker} from 'caihrc';
 import Api from '../../common/request/api/api';
-
-import {IntlProvider, FormattedMessage, addLocaleData} from 'react-intl';
-
-import XLSX from "xlsx";
-
-import axios from 'axios'
-
+import {useTranslation} from 'react-i18next';
 
 const Dashboard = function () {
+    const {t, i18n} = useTranslation();
 
     function superSmsSend() {
         let data = new FormData();
@@ -19,16 +13,6 @@ const Dashboard = function () {
         data.append('templateName', '123');
         data.append('toNumberList', '123456789');
         data.append('subject', '123k');
-        // axios({
-        //     method: "Post",
-        //     url: "http://10.17.34.96:8101/webapi/portal/sendSuperSMS",
-        //     headers: {'Content-Type': 'multipart/form-data',},
-        //     data: data
-        // }).then(res => {
-        //     console.log(res)
-        // })
-
-
         Api.sendSuperSMS(data)
     }
 
@@ -36,7 +20,6 @@ const Dashboard = function () {
     function exportExcel() {
 
     }
-
 
     return (<div className="dsContent">
         <div>
@@ -49,8 +32,10 @@ const Dashboard = function () {
         <div>
             <div>国际化测试</div>
             <div>
-                <FormattedMessage id="intl_breadcrumb"/>
-                <Input/>
+                <h1>{t('login_title')}</h1>
+            </div>
+            <div>
+                <DatePicker/>
             </div>
         </div>
     </div>)

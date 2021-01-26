@@ -1,4 +1,15 @@
 const en = {
+    // 由于要求字段名唯一，就不分多个文件写了；
+    // key 命名规范： page_world; 例如： login_title
+
+    // 登陆------------------
+    login_title: 'Login SMS platform',
+    login_userNamePlaceholder: 'Please enter username',
+    login_passwordPlaceholder: 'Please enter password',
+    login_validCodePlaceholder: 'Please enter verify code',
+    login_loginBtnText  : 'Login',
+
+
     intl_breadcrumb: 'International Products',
     breadcrumb: 'International Products',
     tips: 'Click on the button to change the current language. ',
