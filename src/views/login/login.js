@@ -50,14 +50,11 @@ const Login = function (props) {
 
     async function onFinish() {
         Api.login(loginForm).then(res => {
-            console.log('login-----  res')
-            console.log(res)
             if (!res) return false;
 
             store.set('user', res);
             store.set('menuList', res.menuList);
             store.set('token', res.token);
-
 
             axios.defaults.headers.token = res.token;
             history.push('/sendStatistic')

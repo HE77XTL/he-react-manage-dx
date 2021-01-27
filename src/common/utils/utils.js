@@ -38,10 +38,23 @@ const utils = {
     },
     emptyFilter(data) {
         // '' | null | undefined  返回 "-"
-        if(!data && data !== 0) {
+        if (!data && data !== 0) {
             return '-'
-        }else {
+        } else {
             return data
+        }
+    },
+
+    languageTypeFmt(type) {
+        // 前后端没提前沟通。。。
+        // 不过前端考虑也欠缺了，中文也分简体/繁体， 具体需要繁体的时候，再和后端协商统一字段
+        switch (type) {
+            case 'zh':
+                return 'zh-cn';
+            case 'en':
+                return 'en-us';
+            default:
+                return 'en-us';
         }
     }
 };

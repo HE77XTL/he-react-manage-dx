@@ -1,6 +1,12 @@
 const en = {
     // 由于要求字段名唯一，就不分多个文件写了；
     // key 命名规范： page_world; 例如： login_title
+    // 菜单从后端接口返回的 name  拿到key , 特殊点
+
+    // 菜单------------------
+    sendDetail: 'Send detail',
+    sendStatistic: 'Send data',
+    superSmsSend: 'Send RCS',
 
     // 登陆------------------
     login_title: 'Login SMS platform',
@@ -12,7 +18,8 @@ const en = {
     // 首页------
     home_userCredit: 'Available credit',
     home_logout: 'Logout',
-    home_logoutConfirm: 'Are you sure to log out?',
+    home_logoutConfirm: 'Are you sure to logout?',
+    home_logoutSuccess: 'Logout Success',
     home_confirm: 'Confirm',
     home_cancel: 'Cancel',
     home_modifyPassword: 'Change password',

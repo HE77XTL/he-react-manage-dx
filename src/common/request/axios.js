@@ -6,15 +6,21 @@ import qs from 'qs';
 import store from 'store'
 import {HashRouter} from 'react-router-dom'
 import {Message} from 'caihrc';
+import utils from '../utils/utils'
 
 
 //设置全局默认的请求头
 axios.defaults.headers.token = store.get('token');
+const languageType = store.get('languageType') || 'en';
+axios.defaults.headers.languageType = utils.languageTypeFmt(languageType);
 
 //请求拦截
 axios.interceptors.request.use(
     config => {
         config.headers.token = store.get('token');
+        const languageType = store.get('languageType') || 'en';
+        config.headers.languageType = utils.languageTypeFmt(languageType);
+
         return config;
     },
     error => {

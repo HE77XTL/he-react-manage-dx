@@ -4,10 +4,12 @@ import {useHistory} from "react-router-dom";
 import DsIcon from '../../components/dsIcon/dsIcon'
 import styles from "./home.module.less";
 import store from 'store'
+import {useTranslation} from "react-i18next";
 
 const HomeAside = function (props) {
     const menuList = store.get('menuList');
     const history = useHistory();
+    const {t, i18n} = useTranslation();
 
     const [menuStyle, setMenuStyle] = useState(menuStyleFmt(props.collapse))
 
@@ -26,21 +28,21 @@ const HomeAside = function (props) {
     function menuFmt(menu) {
         return (menu.children && menu.children.length > 0)
             ? <Menu.SubMenu
-                title={menu.name}
+                title={t(menu.name)}
                 key={menu.url}
                 icon={menu.icon ? <DsIcon name={menu.icon} size="18"/> : null}>
                 {menu.children.map(item => {
                     if (item.children && item.children.length > 0) {
                         return (menuFmt(item))
                     } else {
-                        return (<Menu.Item key={item.index}>{item.title}</Menu.Item>)
+                        return (<Menu.Item key={item.index}>{t(item.name)}</Menu.Item>)
                     }
                 })}
             </Menu.SubMenu>
             : <Menu.Item
                 key={menu.url}
                 icon={menu.icon ? <DsIcon name={menu.icon} size="18"/> : null}>
-                {menu.name}
+                {t(menu.name)}
             </Menu.Item>
     }
 

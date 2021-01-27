@@ -16,12 +16,13 @@ import Api from '../../common/request/api/api'
 const Home = function () {
     const history = useHistory();
     const user = store.get('user');
+    const token = store.get('token');
     const menuList = store.get('menuList');
 
     // 未登录，跳转到登陆页
     // 对于token 失效。在接口请求的时候做统一处理了
-    if (!user || !user.userName || !user.token || !menuList) {
-        //history.push('/login');
+    if (!token || !user || !user.userName || !user.token || !menuList) {
+        history.push('/login');
     }
 
     const [collapse, setCollapse] = useState(false);

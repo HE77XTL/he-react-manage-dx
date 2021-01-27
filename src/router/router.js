@@ -40,8 +40,6 @@ export default function App() {
     }
 
     function languageChange(e) {
-        console.log('languageType')
-        console.log(e)
         store.set('languageType', e);
         setAntLanguage(getAntLanguage(e))
     }

@@ -1,6 +1,13 @@
 const zh_cn = {
     // 由于要求字段名唯一，就不分多个文件写了；
     // key 命名规范： page_world; 例如： login_title
+    // 菜单从后端接口返回的 name  拿到key , 特殊点
+
+    // 菜单------------------
+    sendDetail: '发送明细',
+    sendStatistic: '发送统计',
+    superSmsSend: '超信发送',
+
 
     // 登陆------------------
     login_title: '登录短信平台',
@@ -13,6 +20,7 @@ const zh_cn = {
     home_userCredit: '可用额度',
     home_logout: '退出',
     home_logoutConfirm: '确认退出吗？',
+    home_logoutSuccess: '确认成功',
     home_confirm: '确定',
     home_cancel: '取消',
     home_modifyPassword: '修改密码',

@@ -14,6 +14,7 @@ import {DownOutlined, UpOutlined} from '@ant-design/icons';
 import {useTranslation} from "react-i18next";
 import AntZhCN from "caihrc/lib/locale/zh_CN";
 import AntEnGB from "caihrc/lib/locale/en_GB";
+import axios from "axios";
 
 
 const HomeHeader = function (props) {
@@ -84,7 +85,10 @@ const HomeHeader = function (props) {
         i18next.changeLanguage(item.type).catch(() => {
             Message.error("change language fail")
         });
-        store.set("languageChange", item.type)
+
+        store.set("languageType", item.type);
+        axios.defaults.headers.languageType = utils.languageTypeFmt(item.type);
+
         Events.emit("languageChange", item.type);
         setLanguage(item.name);
         setEditPasswordLabelCol(passwordLabelColChange(item.type))
@@ -93,14 +97,16 @@ const HomeHeader = function (props) {
 
     function logout() {
         Modal.confirm({
-            title: '确认退出吗?',
-            cancelText: '取消',
-            okText: '确定',
+            title: t('home_logoutConfirm'),
+            cancelText: t('home_cancel'),
+            okText: t('home_confirm'),
             onOk: () => {
                 Api.logout().then(res => {
                     if (res) {
-                        Message.error('退出成功！');
-                        store.clearAll();
+                        Message.success('退出成功！');
+                        // 清除token 就好
+                        // 其他信息需要保留
+                        store.remove('token');
                         history.push('/login');
                     }
                 })
@@ -261,7 +267,7 @@ const HomeHeader = function (props) {
             {editPasswordModal}
         </div>
         <div>
-            <Button type="primary" size="exSmall" onClick={logout}>退出</Button>
+            <Button style={{width:'60px'}} type="primary" size="exSmall" onClick={logout}>{t('home_logout')}</Button>
         </div>
     </div>)
 };
