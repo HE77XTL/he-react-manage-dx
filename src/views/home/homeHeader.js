@@ -103,7 +103,7 @@ const HomeHeader = function (props) {
             onOk: () => {
                 Api.logout().then(res => {
                     if (res) {
-                        Message.success('退出成功！');
+                        Message.success(t('home_logoutSuccess'));
                         // 清除token 就好
                         // 其他信息需要保留
                         store.remove('token');

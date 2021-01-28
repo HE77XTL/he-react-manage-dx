@@ -1,40 +1,44 @@
 .superSmsSend {
-  min-width: 960px;
-  .uploadLine {
+    min-width: 960px;
+
+    .uploadLine {
+        line-height: 32px;
+        width: 480px;
+        display: flex;
+        align-items: flex-start;
+
+        .fileName {
+            flex: 1;
+        }
+
+        .deleteIcon {
+            padding-left: 16px;
+            cursor: pointer;
+        }
+    }
+
+}
+
+.materialWrap {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    border: solid 1px #cccccc;
+    padding: 4px 0;
+    width: 200px;
 
-    .lineItem {
-      margin-right: 16px;
-      margin-bottom: 10px;
+    .typePanel {
+        text-align: center;
+        margin-right: 10px;
+        flex: 1;
+
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
     }
 
-    .uploadItemWrap {
-      width: 160px;
-      position: relative;
-
-      .linkIcon {
-        position: absolute;
-        top: 56px;
-        left: 8px
-      }
+    .typePanel:first-of-type {
+        border-right: 1px solid #cccccc;
     }
-
-
-    .lineMes {
-      display: flex;
-      align-items: center;
-      height: 36px;
-    }
-
-    .showOrder {
-      margin-left: 50px;
-      padding: 0 10px;
-    }
-    .deleteIcon {
-      cursor: pointer;
-    }
-  }
-
-
 }

@@ -9,10 +9,12 @@ import store from "store";
 import utils from '../../common/utils/utils'
 
 import DsExcelExport from '../../common/utils/dsExcelExport'
+import {useTranslation} from "react-i18next";
 
 const SendDetail = function () {
     const history = useHistory();
     const user = store.get('user');
+    const {t} = useTranslation();
     if (!user) {
         history.push('/login');
     }
@@ -23,7 +25,7 @@ const SendDetail = function () {
         pageSizeOptions: [10, 20, 50, 100],
         total: 1,
         showTotal: (total) => {
-            return '共' + total + '条数据';
+            return t('sendDetail_total', {total});
         },
     };
     const sendStatus = [
@@ -42,33 +44,33 @@ const SendDetail = function () {
         {
             key: 'createTime',
             type: 'date',
-            name: '选择时间',
+            name: t('sendDetail_selectTime'),
             searchValue: '',
-            placeholder: '请选择',
+            placeholder: t('sendDetail_selectTime'),
         },
         {
             key: 'type',
             type: 'select',
-            name: '短信类型',
+            name: t('sendDetail_smsType'),
             searchValue: '',
             options: [],
-            placeholder: '请选择',
+            placeholder: t('sendDetail_smsType'),
         },
         {
             key: 'toNumber',
             type: 'number',
-            name: '短信下发手机号码',
+            name: t('sendDetail_toNumber'),
             searchValue: '',
-            placeholder: '请输入手机号码',
+            placeholder: t('sendDetail_toNumber'),
         },
         {
 
             key: 'status',
             type: 'select',
-            name: '发送状态',
+            name: t('sendDetail_sendStatus'),
             searchValue: "",
             options: sendStatus,
-            placeholder: '请选择',
+            placeholder: t('sendDetail_sendStatus'),
         },
 
     ];
@@ -104,7 +106,7 @@ const SendDetail = function () {
 
     const columns = [
         {
-            title: '序号',
+            title: t('common_serialNumber'),
             dataIndex: 'serialNumber',
             key: 'serialNumber',
             align: 'center',
@@ -113,7 +115,7 @@ const SendDetail = function () {
             }
         },
         {
-            title: '短信类型',
+            title: t('sendDetail_smsType'),
             dataIndex: 'type',
             key: 'type',
             align: 'center',
@@ -122,19 +124,19 @@ const SendDetail = function () {
             }
         },
         {
-            title: '手机号',
+            title: t('common_phoneNumber'),
             dataIndex: 'toNumber',
             key: 'toNumber',
             align: 'center',
         },
+        // {
+        //     title: t('sendDetail_RCSTemplate'),
+        //     dataIndex: 'templateName',
+        //     key: 'templateName',
+        //     align: 'center',
+        // },
         {
-            title: '超信模板',
-            dataIndex: 'templateName',
-            key: 'templateName',
-            align: 'center',
-        },
-        {
-            title: '短信内容',
+            title: t('sendDetail_smsContent'),
             dataIndex: 'message',
             key: 'message',
             align: 'center',
@@ -144,13 +146,13 @@ const SendDetail = function () {
             }
         },
         {
-            title: '国家',
+            title: t('common_country'),
             dataIndex: 'countryName',
             key: 'countryName',
             align: 'center',
         },
         {
-            title: '发送状态',
+            title: t('sendDetail_sendStatus'),
             dataIndex: 'status',
             key: 'status',
             align: 'center',
@@ -164,7 +166,7 @@ const SendDetail = function () {
             }
         },
         {
-            title: '是否计费',
+            title: t('sendDetail_isBilling'),
             dataIndex: 'isBilling',
             key: 'isBilling',
             align: 'center',
@@ -186,13 +188,13 @@ const SendDetail = function () {
             }
         },
         {
-            title: '计费金额',
+            title: t('sendDetail_amount'),
             dataIndex: 'price',
             key: 'price',
             align: 'center',
         },
         {
-            title: '请求时间',
+            title: t('sendDetail_requestTime'),
             dataIndex: 'createtime',
             key: 'createtime',
             align: 'center',
@@ -201,7 +203,7 @@ const SendDetail = function () {
             }
         },
         {
-            title: '送达时间',
+            title: t('sendDetail_receiveTime'),
             dataIndex: 'receivetime',
             key: 'receivetime',
             align: 'center',
@@ -210,14 +212,14 @@ const SendDetail = function () {
             }
         },
         {
-            title: '操作',
+            title: t('common_operation'),
             key: 'action',
             align: 'center',
             render: (text, record) => (
                 <div>
                     <div className="dsClickableRed" onClick={() => {
                         onSendDetail(text, record)
-                    }}>详情
+                    }}>{t('common_detail')}
                     </div>
                 </div>
             ),
@@ -422,14 +424,18 @@ const SendDetail = function () {
             <div style={{marginBottom: '10px'}}>
                 <Button type='danger' onClick={() => {
                     excelExport()
-                }}>导出</Button>
+                }}>{t('common_exportTable')}</Button>
             </div>
             <Table onChange={onTableChange} dataSource={tableData} columns={columns} pagination={pagination} bordered/>
-            <div style={{
-                position: 'relative',
-                top: '-50px'
-            }}>注：由于短信数据量较大，默认展示昨日短信数据，并可选择近7天数据进行查询
-            </div>
+            {tableData.length > 0 ? (
+                <div style={{
+                    position: 'relative',
+                    width: '500px',
+                    top: '-50px',
+                    left: '12px'
+                }}>{t('sendDetail_tips')}
+                </div>
+            ) : null}
         </div>
         {DetailModal}
     </div>)

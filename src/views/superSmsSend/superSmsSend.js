@@ -1,16 +1,22 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
-import {Input, Button, Modal, Form, Upload, Message} from 'caihrc'
+import {Input, Button, Modal, Form, Upload, Message, Descriptions} from 'caihrc'
 import {DeleteOutlined, LinkOutlined} from '@ant-design/icons';
 import DsBreadcrumb from '../../components/dsBreadcrumb/dsBreadcrumb'
-import classnames from 'classnames'
 
+import iconText from "../../images/text.png";
+import iconTextActive from "../../images/text_active.png";
+import iconImg from "../../images/img.png";
+import iconImgActive from "../../images/img_active.png";
+import Events from "../../common/utils/Events";
 import Api from '../../common/request/api/api'
-
-
 import styles from './superSmsSend.module.less'
+import {useTranslation} from "react-i18next";
+import store from "store";
+
 
 const SuperSmsSend = function () {
+    const languageType = store.get('languageType') || 'en';
     const crumbs = [
         {
             value: 'superSmsSend',
@@ -18,60 +24,116 @@ const SuperSmsSend = function () {
             url: ''
         },
     ];
+    const {t} = useTranslation();
     const [form] = Form.useForm();
+    const [uploadForm] = Form.useForm();
+    const [onlyTxt, setOnlyTxt] = useState(t('superSmsSend_onlyTxt'))
 
-    const [contentList, setContentList] = useState([
+
+    const [limitTips, setLimitTips] = useState({
+        txt: t('superSmsSend_onlyTxt'),
+        image: t('superSmsSend_onlyImage'),
+    });
+
+    const [uploadLabelCol, setUploadLabelCol] = useState(uploadLabelColChange(languageType));
+
+    function getMaterialTypeDirections(type) {
+        switch (type) {
+            case 0:
+                return t('superSmsSend_onlyTxt');
+            case 1:
+                return t('superSmsSend_onlyImage');
+            default:
+                return t('superSmsSend_onlyTxt');
+        }
+    }
+
+
+    const [detailVisible, setDetailVisible] = useState(false);
+
+    const [materialTypeList, setMaterialTypeList] = useState([
         {
             type: 0,
-            fileList: [],
-            tipsText: '仅支持.txt格式'
-        }, {
-            type: 0,
-            fileList: [],
-            tipsText: '仅支持.txt格式'
+            icon: iconText,
+            activeIcon: iconTextActive,
+            active: true,
+            text: '文本',
+            directions: getMaterialTypeDirections(0)
+        },
+        {
+            type: 1,
+            icon: iconImg,
+            activeIcon: iconImgActive,
+            active: false,
+            text: '图片',
+            directions: getMaterialTypeDirections(1)
         }
     ]);
 
-    function upLoadChange(info, item, index) {
-        let fileList = [...info.fileList];
-        fileList = fileList.slice(-1);
-        const newContentList = contentList.concat();
-        newContentList[index].fileList = fileList;
-        setContentList(newContentList)
+    const [materialList, setMaterialList] = useState([]);
+
+
+    const [materialForm, setMaterialForm] = useState({
+        type: 0,
+        directions: getMaterialTypeDirections(0),
+        fileList: []
+    });
+
+
+    useEffect(() => {
+        Events.on("languageChange", languageChange);
+        return () => {
+            Events.off("languageChange", languageChange);
+        }
+    }, []);
+
+    function languageChange(e) {
+        console.log(e)
+        const xxx = t('superSmsSend_onlyTxt')
+        console.log(xxx)
+        setOnlyTxt(t('superSmsSend_onlyTxt'))
+        const yyy = {
+            txt: t('superSmsSend_onlyTxt'),
+            image: t('superSmsSend_onlyImage'),
+        };
+
+        setLimitTips(yyy)
+        setUploadLabelCol(uploadLabelColChange(e))
+
     }
 
-    function contentDelete(item, index) {
-        const newContentList = contentList.concat();
-        newContentList.splice(index, 1)
-        setContentList(newContentList)
+
+    // 选择文件弹框中label 宽度，根据不同语言进行设置
+
+    function uploadLabelColChange(languageType) {
+        switch (languageType) {
+            case 'zh':
+                return 4;
+            case 'en':
+                return 6;
+            default:
+                return 6;
+        }
     }
 
 
-    function addContent() {
-        setContentList(contentList.concat([{
-            type: 0,
-            fileList: [],
-            tipsText: '仅支持.txt格式'
-        }]))
-    }
-
-    function contentTypeChange(e, item, index) {
-        const tipsText = e === 1 ? '仅支持.jpg、.jpeg、.png 格式，大小不超过2M' : '仅支持.txt格式';
-        const contentFmt = contentList[index];
-        contentFmt.tipsText = tipsText;
-        contentFmt.type = e;
-        const newContentList = contentList.concat();
-        newContentList.splice(index, 1, contentFmt);
-        console.log(newContentList)
-        setContentList(newContentList)
+    function onMaterialListDelete(index) {
+        const newMaterialList = materialList.concat();
+        newMaterialList.splice(index, 1);
+        setMaterialList(newMaterialList)
     }
 
     function onFinish() {
-        const result = contentValid();
-        confirmModel(result.message, result.status)
+        console.log(11111)
+        console.log(form.getFieldsValue())
+        console.log(materialList)
+        //const result = contentValid();
+        //confirmModel(result.message, result.status)
     }
 
     function onFinishFailed(errorInfo) {
+        console.log(form.getFieldsValue())
+        return;
         // 判断验证不通过第一项是不是 模板名称
         console.log('Failed:', errorInfo.errorFields[0]);
         const errName = errorInfo.errorFields[0].name;
@@ -92,37 +154,17 @@ const SuperSmsSend = function () {
     // 超信内容自定义校验规则
 
     const contentValid = () => {
-        let validResult = {
-            status: 'success',
-            message: '是否确认提交？'
-        };
-
-        if (contentList.length === 0) {
-            validResult.status = 'fail';
-            validResult.message = '请添加超信内容';
+        return {
+            message: '123',
+            status: '456'
         }
-        for (let fileObj of contentList) {
-            if (!fileObj.fileList || fileObj.fileList.length === 0) {
-                if (fileObj.type === 0) {
-                    // 文本
-                    validResult.status = 'fail';
-                    validResult.message = '请添加超信文本';
-                } else {
-                    // 图片
-                    validResult.status = 'fail';
-                    validResult.message = '请添加超信图片';
-                }
-                break
-            }
-        }
-        return validResult
-    }
+    };
 
     function confirmModel(message, type) {
         Modal.confirm({
-            title: '提示',
-            okText: '确认',
-            cancelText: '取消',
+            title: t('common_message'),
+            okText: t('common_confirm'),
+            cancelText: t('common_cancel'),
             content: message,
             onOk: () => {
                 if (type === 'success') {
@@ -130,6 +172,14 @@ const SuperSmsSend = function () {
                 }
             }
         })
+    }
+
+    // 弹框------------------------
+    function onMaterialTypeClick(item) {
+        setMaterialForm(Object.assign({}, materialForm, {
+            type: item.type,
+            directions: getMaterialTypeDirections(item.type)
+        }))
     }
 
 
@@ -141,27 +191,173 @@ const SuperSmsSend = function () {
                 data.append([key], [formData[key]]);
             }
         }
-        for (let item of contentList) {
-            data.append('file', item.fileList[0]);
-        }
+        // for (let item of contentList) {
+        //     data.append('file', item.fileList[0]);
+        // }
         Api.sendSuperSMS(data)
     }
+
+    function onRemove(file) {
+        console.log(file)
+        setMaterialForm(Object.assign({}, materialForm, {
+            fileList: []
+        }));
+    }
+
+    function beforeUpload(file, fileList) {
+        console.log(file)
+
+        const validResult = materialForm.type === 0 ? uploadTextValid(file) : uploadImageValid(file)
+        if (validResult) {
+            setMaterialForm(Object.assign({}, materialForm, {
+                fileList: [file]
+            }));
+        }
+        return false
+    }
+
+    function uploadTextValid(file) {
+        if (file.type !== 'text/plain') {
+            Message.error('只能选择 .txt 文件')
+            return false
+        }
+        if (file.size / 1024 > 300) {
+            Message.error('文件不能超过300k')
+            return false
+        }
+        return true
+    }
+
+    function uploadImageValid(file) {
+        const imgTypes = ['image/jpg', 'image/jpeg', 'image/png'];
+        if (!imgTypes.includes('file.type')) {
+            Message.error('只能选择 img 文件');
+            return false
+        }
+        if (file.size / 1024 > 300) {
+            Message.error('文件不能超过300k');
+            return false
+        }
+        return true
+    }
+
+
+    function getUploadBtnText() {
+        switch (materialForm.type) {
+            case 0:
+                return t('superSmsSend_uploadText');
+            case 1:
+                return t('superSmsSend_uploadImage');
+            default:
+                return t('superSmsSend_uploadText');
+        }
+    }
+
+    function getUploadAccept() {
+        switch (materialForm.type) {
+            case 0:
+                return '.txt';
+            case 1:
+                return '.jpg,.jpeg,.png';
+            default:
+                return '.txt';
+        }
+    }
+
+
+    function uploadModalConfirm() {
+        console.log(materialForm)
+        if (materialForm.fileList.length === 0) {
+            const message = (materialForm.type === 0) ? t('superSmsSend_RCSTextNoEmpty') : t('superSmsSend_RCSImageNoEmpty')
+            Message.error(message)
+        }
+        //materialList.push(materialForm);
+        //                 setDetailVisible(false);
+    }
+
+    const uploadModal = (
+        <Modal
+            okText={t('common_confirm')}
+            cancelText={t('common_cancel')}
+            title={t('superSmsSend_contentType')}
+            maskClosable={false}
+            visible={detailVisible}
+            onOk={uploadModalConfirm}
+            onCancel={() => {
+                setDetailVisible(false);
+            }}
+            initialWidth={600}
+            initialHeight={300}
+        >
+            <div>
+                <Form form={uploadForm} labelCol={{span: uploadLabelCol}}>
+                    <Form.Item label={t('superSmsSend_materialType')}>
+                        <div className={styles.materialWrap}>
+                            {materialTypeList.map(item => {
+                                return (<div className={styles.typePanel} onClick={e => {
+                                    onMaterialTypeClick(item)
+                                }}>
+                                    <img src={item.type === materialForm.type ? item.activeIcon : item.icon}
+                                         alt="logo"/>
+                                    <div>{item.text}</div>
+                                </div>)
+                            })}
+                        </div>
+                    </Form.Item>
+                    <Form.Item label={t('superSmsSend_materialUpload')}
+                               name="file"
+                               rules={[
+                                   {
+                                       required: true,
+                                       validator: async () => {
+                                           Promise.resolve('')
+                                       },
+                                   },
+                               ]}>
+                        <Upload action="#"
+                                accept={getUploadAccept()}
+                                maxCount={1}
+                                customReques=""
+                                fileList={materialForm.fileList}
+                                onRemove={onRemove}
+                                beforeUpload={beforeUpload}>
+                            <Button>
+                                {getUploadBtnText()}
+                            </Button>
+                        </Upload>
+                        {materialForm.fileList.length > 0 ? (
+                            <div style={{position: 'absolute', top: '56px', left: '6px'}}>
+                                <LinkOutlined/>
+                            </div>) : null}
+                    </Form.Item>
+                    <Form.Item label={t('superSmsSend_materialTips')}>
+                        <div style={{lineHeight: '36px'}}>
+                            {materialForm.directions}
+                        </div>
+                    </Form.Item>
+                </Form>
+            </div>
+        </Modal>
+    );
 
 
     return (<div className='dsContent'>
         <DsBreadcrumb crumbs={crumbs}/>
         <div className={styles.superSmsSend}>
-            <Form form={form} name="superSmsTask" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+            <Form form={form}
+                  name="superSmsTask"
+                  labelCol={{span: 4}}
+                  onFinish={onFinish}
+                  onFinishFailed={onFinishFailed}>
                 <Form.Item
-                    label="模板名称"
-                    name="templateName"
-                    rules={[{required: true, message: '请添加任务名称'}]}
+                    label="超信主题"
+                    name="subject"
                 >
                     <Input type="text" style={{width: '200px'}}/>
                 </Form.Item>
 
                 <Form.Item
-                    label="内容类型"
+                    label={t('superSmsSend_contentType')}
                     name="file"
                     rules={[
                         {
@@ -173,75 +369,54 @@ const SuperSmsSend = function () {
                     ]}
                 >
                     <div>
-                        {contentList.map((contentItem, index) => {
-                            return (
-                                <div className={styles.uploadLine}>
-                                    <Input type="select" defaultValue={contentItem.type} options={[
-                                        {"label": "超信文本", "value": 0},
-                                        {"label": "超新图片", "value": 1},
-                                    ]} onChange={(e) => {
-                                        contentTypeChange(e, contentItem, index)
-                                    }} style={{width: '160px'}} className={styles.lineItem}/>
-                                    <div className={styles.uploadItemWrap}>
-                                        <Input.Upload
-                                            onChange={(e) => {
-                                                upLoadChange(e, contentItem, index)
-                                            }}
-                                            customRequest={(e) => {
-                                                console.log(e)
-                                            }}
-                                            fileList={contentItem.fileList}
-                                            showUploadList={{showRemoveIcon: false}} className={styles.lineItem}>
-                                            <Button style={{width: '150px'}}>点击上传</Button>
-                                        </Input.Upload>
-                                        {/*也不知道什么默认得图标没出来*/}
-                                        {/*只可以上传一项文件，暂时用定位得方式来做了*/}
-                                        <div className={styles.linkIcon}>
-                                            {contentItem.fileList.map(() => {
-                                                return <LinkOutlined/>
-                                            })}
-                                        </div>
+                        <div>
+                            {materialList.map((material, index) => {
+                                return (<div className={styles.uploadLine}>
+                                    <div>类型 {material.type}</div>
+                                    <div
+                                        className={styles.fileName}>文件名 {material.fileList[0] && material.fileList[0].name} </div>
+                                    <div style={{marginLeft: '20px'}}>排序:{index + 1} </div>
+                                    <div className={styles.deleteIcon} onClick={e => {
+                                        onMaterialListDelete(index)
+                                    }}>
+                                        <DeleteOutlined/>
                                     </div>
-                                    <div className={classnames(styles.lineItem, styles.lineMes)}>
-                                        <div style={{width: '300px'}}>{contentItem.tipsText}</div>
-                                        <div className={styles.showOrder}>展示顺序: {index}</div>
-                                        <DeleteOutlined className={styles.deleteIcon} onClick={e => {
-                                            contentDelete(contentItem, index)
-                                        }}/>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                        <div style={{width: '300px'}}>
-                            <Button block onClick={() => {
-                                addContent()
-                            }}>添加超信内容</Button>
+                                </div>)
+                            })}
+                        </div>
+                        <div>
+                            <Button onClick={e => {
+                                setMaterialForm({
+                                    type: 0,
+                                    directions: getMaterialTypeDirections(0),
+                                    fileList: []
+                                });
+                                setDetailVisible(true);
+                            }}>+{t('superSmsSend_addRCSContent')}</Button>
                         </div>
                     </div>
                 </Form.Item>
                 <Form.Item
-                    label="超信主题"
-                    name="subject"
-                    rules={[{required: true, message: '请添加超信主题'}]}
-                >
-                    <Input type="text" style={{width: '200px'}}/>
-                </Form.Item>
-                <Form.Item
-                    label="接收号码"
+                    label={t('superSmsSend_receivePhone')}
                     name="toNumberList"
-                    rules={[{required: true, message: '发送号码不能为空'}]}
+                    rules={[{required: true, message: t('superSmsSend_toNumberNoEmpty')}]}
                 >
                     <Input type="textarea"
+                           placeholder="可填写多个手机号码（以换行符进行分隔），例如：
+                           13800138000
+                           13800138001
+                           13800138002"
                            autoSize={{minRows: 6}}
                            value="type=textarea" style={{width: '480px'}}/>
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
-                        提交
+                        {t('common_submit')}
                     </Button>
                 </Form.Item>
             </Form>
         </div>
+        {uploadModal}
     </div>)
 }
 

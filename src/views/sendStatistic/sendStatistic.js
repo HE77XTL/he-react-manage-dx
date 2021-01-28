@@ -7,6 +7,7 @@ import DsBreadcrumb from '../../components/dsBreadcrumb/dsBreadcrumb'
 import Api from '../../common/request/api/api'
 
 import utils from '../../common/utils/utils'
+import {useTranslation} from "react-i18next";
 
 
 const SendStatistic = function () {
@@ -17,6 +18,7 @@ const SendStatistic = function () {
             url: ''
         },
     ];
+    const {t} = useTranslation();
 //--- useState ----------------------
     const [statisticForm, setStatisticForm] = useState({
         sendNumber: 0,
@@ -44,14 +46,17 @@ const SendStatistic = function () {
 
 
     const summary = [
+        // 后端有些有单位，有些没有。。。
         {
-            title: '当月成功发送数',
+            title: t('sendStatistic_SuccessOfMonth'),
             number: statisticForm.sendNumber,
-            unit: '条'
+            isUnit: false,
+            unit: t('common_pieces')
         },
         {
-            title: '当月消耗金额',
+            title: t('sendStatistic_ConsumptionOfMonth'),
             number: statisticForm.monetary,
+            isUnit: true,
             unit: '元'
         }
     ];
@@ -61,11 +66,14 @@ const SendStatistic = function () {
             <div className={classNames('ds-border', styles.panel)}>
                 <div>{data.title}</div>
                 <div className={styles.numberLine}>
-                    <div className={styles.number}>{utils.emptyFilter(data.number)}</div>
-                    <div className={styles.unit}>{data.unit}</div>
+                    <div className={styles.number}> {SummaryNumber(data)}</div>
                 </div>
             </div>
         )
+    };
+
+    const SummaryNumber = function (data) {
+        return data.isUnit ? utils.emptyFilter(data.number) : `${utils.emptyFilter(data.number)}${data.unit}`
     }
 
 
@@ -77,7 +85,7 @@ const SendStatistic = function () {
             })}
         </div>
         <div>
-            注：展示当月数据概况（更新至昨日）
+            {t('sendStatistic_statisticNote')}
         </div>
     </div>)
 }

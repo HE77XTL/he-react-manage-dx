@@ -7,9 +7,11 @@ import moment from 'moment'
 import {Input, Button} from 'caihrc'
 
 import styles from './dsSearchBox.module.less'
+import {useTranslation} from "react-i18next";
 
 
 const DsSearchBox = function (props) {
+    const {t} = useTranslation();
     const searcitems = props.searcitems;
 
     const [searchForm, setSearchForm] = useState({});
@@ -95,10 +97,10 @@ const DsSearchBox = function (props) {
             <div>
                 <Button onClick={() => {
                     onReset()
-                }}>重置</Button>
+                }}>{t('common_reset')}</Button>
                 <Button type="danger" onClick={() => {
                     onOperateClick('search')
-                }}>搜索</Button>
+                }}>{t('common_query')}</Button>
             </div>
         </div>
     </div>)
