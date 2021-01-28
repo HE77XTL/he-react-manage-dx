@@ -78,7 +78,11 @@ const Login = function (props) {
                     onFinishFailed={onFinishFailed}>
                     <Form.Item
                         name="loginAccount"
-                        rules={[{required: true, message: t('login_userNamePlaceholder')}]}>
+                        rules={[{
+                            required: true,
+                            pattern: /^(?![0-9]$)(?![a-zA-Z]$)[0-9A-Za-z]{2,50}$/,
+                            message: t('login_userNamePlaceholder')
+                        }]}>
                         <Input value={loginForm.loginAccount}
                                onChange={(e) => {
                                    updateLoinForm({loginAccount: e.target.value})

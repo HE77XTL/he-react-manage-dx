@@ -31,7 +31,7 @@ const apiConfig = {
 
         } else {
             // 部署
-            const baseAPI = process.env.VUE_APP_API === 'test' ? '//10.17.34.96:8101/webapi/' : "//10.17.34.96:8101/webapi";
+            const baseAPI = process.env.REACT_APP_ENV === 'stage' ? '//10.8.11.240:8101/' : "//10.17.34.96:8101/";
             webapi = baseAPI + 'webapi';
             // mall = baseAPI + 'mall';
             // order = baseAPI + 'order';
@@ -42,6 +42,5 @@ const apiConfig = {
 
 
 export default apiConfig;
-
 
 

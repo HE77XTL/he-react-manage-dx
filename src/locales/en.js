@@ -41,7 +41,7 @@ const en = {
     sendDetail_selectTime: 'Select time',
     sendDetail_smsType: 'SMS type',
     sendDetail_toNumber: 'Phone number',
-    sendDetail_sendStatus: 'Sendi state',
+    sendDetail_sendStatus: 'Send state',
     sendDetail_RCSTemplate: 'RCS template',
     sendDetail_smsContent: 'Content of SMS',
     sendDetail_isBilling: 'Charged or not',
@@ -93,7 +93,9 @@ const en = {
     common_submit: 'Submit',
     common_submitConfirm: 'Confirm submission?',
     common_message: 'Message',
-
+    common_sending: 'Sending',
+    common_success: 'Success',
+    common_fail: 'Fail',
 
     intl_breadcrumb: 'International Products',
     breadcrumb: 'International Products',

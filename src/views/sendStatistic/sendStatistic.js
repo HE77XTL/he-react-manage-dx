@@ -11,14 +11,15 @@ import {useTranslation} from "react-i18next";
 
 
 const SendStatistic = function () {
+    const {t} = useTranslation();
     const crumbs = [
         {
             value: 'sendStatistic',
-            name: '发送统计',
+            name: t('sendStatistic'),
             url: ''
         },
     ];
-    const {t} = useTranslation();
+
 //--- useState ----------------------
     const [statisticForm, setStatisticForm] = useState({
         sendNumber: 0,

@@ -11,6 +11,8 @@ import utils from '../../common/utils/utils'
 import DsExcelExport from '../../common/utils/dsExcelExport'
 import {useTranslation} from "react-i18next";
 
+import Events from "../../common/utils/Events";
+
 const SendDetail = function () {
     const history = useHistory();
     const user = store.get('user');
@@ -28,10 +30,11 @@ const SendDetail = function () {
             return t('sendDetail_total', {total});
         },
     };
-    const sendStatus = [
-        {label: "发送中", value: '99001'},
-        {label: "成功", value: '99002'},
-        {label: "失败", value: '99003'}];
+
+    const [sendStatus, setSendStatus] = useState([
+        {label: t('common_sending'), value: '99001'},
+        {label: t('common_success'), value: '99002'},
+        {label: t('common_fail'), value: '99003'}])
 
 
     const [tableData, setTableData] = useState([]);
@@ -40,18 +43,26 @@ const SendDetail = function () {
         pageSize: 10,
     });
     const [pagination, setPagination] = useState(initPagination);
+    const [searchLabel, setSearchLabel] = useState({
+        createTime: t('sendDetail_selectTime'),
+        type: t('sendDetail_smsType'),
+        toNumber: t('sendDetail_toNumber'),
+        status: t('sendDetail_sendStatus'),
+    });
+
+
     const searchItems = [
         {
             key: 'createTime',
             type: 'date',
-            name: t('sendDetail_selectTime'),
+            name: searchLabel.createTime,
             searchValue: '',
             placeholder: t('sendDetail_selectTime'),
         },
         {
             key: 'type',
             type: 'select',
-            name: t('sendDetail_smsType'),
+            name: searchLabel.type,
             searchValue: '',
             options: [],
             placeholder: t('sendDetail_smsType'),
@@ -59,7 +70,7 @@ const SendDetail = function () {
         {
             key: 'toNumber',
             type: 'number',
-            name: t('sendDetail_toNumber'),
+            name: searchLabel.toNumber,
             searchValue: '',
             placeholder: t('sendDetail_toNumber'),
         },
@@ -67,7 +78,7 @@ const SendDetail = function () {
 
             key: 'status',
             type: 'select',
-            name: t('sendDetail_sendStatus'),
+            name: searchLabel.status,
             searchValue: "",
             options: sendStatus,
             placeholder: t('sendDetail_sendStatus'),
@@ -85,6 +96,56 @@ const SendDetail = function () {
     useEffect(() => {
         initData();
     }, []);
+    useEffect(() => {
+        Events.on("languageChange", languageChange);
+        return () => {
+            Events.off("languageChange", languageChange);
+        }
+    }, []);
+
+    function languageChange(e) {
+        setSendStatus([
+            {label: t('common_sending'), value: '99001'},
+            {label: t('common_success'), value: '99002'},
+            {label: t('common_fail'), value: '99003'}])
+        setSearchBoxData([
+            {
+                key: 'createTime',
+                type: 'date',
+                name: t('sendDetail_selectTime'),
+                searchValue: '',
+                placeholder: t('sendDetail_selectTime'),
+            },
+            {
+                key: 'type',
+                type: 'select',
+                name: t('sendDetail_smsType'),
+                searchValue: '',
+                options: [],
+                placeholder: t('sendDetail_smsType'),
+            },
+            {
+                key: 'toNumber',
+                type: 'number',
+                name: t('sendDetail_toNumber'),
+                searchValue: '',
+                placeholder: t('sendDetail_toNumber'),
+            },
+            {
+
+                key: 'status',
+                type: 'select',
+                name: t('sendDetail_sendStatus'),
+                searchValue: "",
+                options: [
+                    {label: t('common_sending'), value: '99001'},
+                    {label: t('common_success'), value: '99002'},
+                    {label: t('common_fail'), value: '99003'}],
+                placeholder: t('sendDetail_sendStatus'),
+            },
+
+        ])
+    }
 
     async function initData() {
         await getSendType();// table 中的短信类型翻译需要先获取到数据
@@ -98,7 +159,7 @@ const SendDetail = function () {
     const crumbs = [
         {
             value: 'sendDetail',
-            name: '发送明细',
+            name: t('sendDetail'),
             url: ''
         },
     ];

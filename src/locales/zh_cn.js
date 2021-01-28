@@ -95,6 +95,10 @@ const zh_cn = {
     common_submit: '提交',
     common_submitConfirm: '是否确认提交？',
     common_message: '提示',
+    common_sending: '发送中',
+    common_success: '成功',
+    common_fail: '失败',
+
 
 
     intl_breadcrumb: '国际化产品',
